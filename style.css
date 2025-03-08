@@ -46,10 +46,9 @@
     transition: color 0.3s ease;
 }
 
-.nav a:not(.active):hover {
-    background-color: rgba(18, 108, 255, 0.1);
-    border-radius: 6px;
-    transition: background 0.1s ease-in-out;
+.nav a:hover {
+    color: #d3d3d3;    
+
 }
 
 body {
