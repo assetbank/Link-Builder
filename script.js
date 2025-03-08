@@ -2,6 +2,18 @@ function sanitizeDatabaseName(input) {
     return input.replace(/[^a-zA-Z0-9-]/g, "_"); // Replace invalid characters with "_"
 }
 
+document.addEventListener("DOMContentLoaded", function () {
+    // Fix navigation active class dynamically
+    let currentPage = window.location.pathname.split("/").pop();
+
+    document.querySelectorAll(".nav a").forEach(link => link.classList.remove("active"));
+
+    if (currentPage === "" || currentPage === "index.html") {
+        document.querySelector('a[href="index.html"]').classList.add("active");
+    } else if (currentPage === "terms.html") {
+        document.querySelector('a[href="terms.html"]').classList.add("active");
+    }
+});
 
 document.addEventListener("DOMContentLoaded", function () {
     let currentContainer = 0;
@@ -140,7 +152,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 document.addEventListener("DOMContentLoaded", function () {
-    const baseURLInputs = document.querySelectorAll("#baseURL");
+    const baseURLInputs = document.querySelectorAll("#baseURL"); 
 
     baseURLInputs.forEach(input => {
         input.addEventListener("blur", function () {
