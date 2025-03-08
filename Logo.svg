@@ -1,0 +1,7 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="40" height="40">
+	<title>Logo</title>
+	<style>
+		.s0 { fill: none;stroke: #ffffff;stroke-miterlimit:100;stroke-width: 150 } 
+	</style>
+	<path id="Shape 1" fill-rule="evenodd" class="s0" d="m250 407c-86.8 0-157-70.2-157-157 0-86.8 70.2-157 157-157 86.8 0 157 70.2 157 157 0 86.8-70.2 157-157 157z"/>
+</svg>
