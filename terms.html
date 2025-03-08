@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Use & Privacy Policy</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+               body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F7F8F9;
+            text-align: left;
+            padding: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: auto;
+            overflow-y: auto;
+        }
+        .persistent-container {
+        background-color: #F7F8F9;
+        width: 970px;
+        padding: 25px;
+        position: relative;
+        margin-bottom: 50px;
+        
+        
+}
+        h1 {
+            text-align: left;
+            padding: 20px 0px;
+
+}
+    </style>
+    <script>
+        function setFavicon() {
+            let favicon = document.querySelector("link[rel='icon']") || document.createElement("link");
+            favicon.rel = "icon";
+            favicon.type = "image/svg+xml";
+            favicon.href = `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'><path fill='%23126CFF' d='M224 0C100.3 0 0 100.3 0 224S100.3 448 224 448 448 347.7 448 224 347.7 0 224 0zM224 128c53 0 96 43 96 96s-43 96-96 96-96-43-96-96 43-96 96-96z'/></svg>`;
+            document.head.appendChild(favicon);
+        }
+        document.addEventListener("DOMContentLoaded", setFavicon);
+    </script>
+</head>
+<body>
+    <header class="header">
+        <img src="bynder-logo-white.png" alt="Logo" class="logo">
+        <nav class="nav">
+            <a href="index.html">Link Builder</a>
+            <a href="terms.html" class="active">Terms & Privacy</a>
+        </nav>
+    </header>
+    
+    
+    <div class="persistent-container">
+    <main class="content">
+        <h1>Terms of Use & Privacy Policy</h1>
+        <h2>1. Terms of Use</h2>
+    
+        <h3>1.1 Acceptance of Terms</h3>
+        <p>By accessing and using this website, you agree to comply with and be bound by these Terms of Use. If you do not agree with any part of these terms, please do not use the website.</p>
+    
+        <h3>1.2 Purpose of the Website</h3>
+        <p>This website provides a tool for generating links in real-time. All operations occur within the user’s browser, and there is no backend storage of any data entered.</p>
+    
+        <h3>1.3 Modifications & Termination</h3>
+        <p>The website owner reserves the right to modify or discontinue the service at any time without prior notice. These Terms of Use may be updated periodically, and continued use of the website signifies your acceptance of any modifications.</p>
+    
+        <h2>2. Privacy Policy</h2>
+    
+        <h3>2.1 Data Usage & Storage</h3>
+        <ul>
+            <li>The data entered on this website is used solely for generating links in real-time.</li>
+            <li>No entered data is stored on a server or backend system; all processing occurs locally in your browser.</li>
+            <li>Once you refresh or leave the page, all entered data is permanently lost.</li>
+        </ul>
+    
+        <h3>2.2 Cookies & Tracking</h3>
+        <ul>
+            <li>This website does not use cookies or any tracking mechanisms.</li>
+            <li>No personal data is collected, retained, or shared.</li>
+        </ul>
+    
+        <h3>2.3 Third-Party Services</h3>
+        <p>This website does not integrate with third-party services for data collection, analytics, or advertising purposes.</p>
+    
+        <h3>2.4 Security</h3>
+        <p>Although this website does not store data, users should still ensure that any entered information is handled responsibly, especially when generating links for external use.</p>
+    </main>
+</div>
+<script>
+    // Get the current page filename
+    let currentPage = window.location.pathname.split("/").pop();
+
+    // Apply active class based on the page
+    if (currentPage === "index.html" || currentPage === "") {
+        document.getElementById("nav-home").classList.add("active");
+    } else if (currentPage === "terms.html") {
+        document.getElementById("nav-terms").classList.add("active");
+    }
+</script>
+<script>
+    let lastScrollY = window.scrollY;
+    const header = document.querySelector(".header");
+
+    window.addEventListener("scroll", () => {
+        if (window.scrollY > lastScrollY) {
+            // User is scrolling down → Hide header
+            header.classList.add("hidden");
+        } else {
+            // User is scrolling up → Show header
+            header.classList.remove("hidden");
+        }
+        lastScrollY = window.scrollY; // Update last scroll position
+    });
+</script>
+
+</body>
+</html>

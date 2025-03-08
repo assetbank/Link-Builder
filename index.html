@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link Builder</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+               body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F7F8F9;
+            text-align: center;
+            padding: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: auto;
+            overflow-y: auto;
+        }
+        h1 {
+            text-align: left;
+            font-size: 40px;
+            color: #031026;
+            padding: 10px 0px;
+            padding-left: 45px;
+    
+        }
+            
+        h2 {
+            text-align: left;
+            padding: 10px 0px;
+            padding-left: 45px;
+
+        }   
+        h3 {
+            font-size: 14px;
+            font-weight:350;
+            text-align: left;
+            padding-left: 45px;
+            padding-right: 45px;
+            margin-top: -15px;
+            margin-bottom: 0px;
+                
+        }       
+        .form-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: -5px;
+            gap: 70px;
+            padding-top: 25px;
+            padding-bottom: 15px;
+        }
+        label i {
+            margin-right: 5px;
+            color: #ffff;
+            
+        }
+        input {
+            width: 75%; 
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #D1D5DB;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 0px;
+        }
+        button {
+            padding: 8px 14px;
+            background-color: #126CFF;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background 0.3s;
+            margin: 20px;
+        }
+        button:hover {
+            background-color: #005BB5;
+        }
+        .output-container {
+            background: #E3F2FD;
+            padding: 10px;
+            border-radius: 6px;
+            word-wrap: break-word;
+            text-align: center;
+            font-size: 12px;
+            
+        }
+        label {
+            font-size: 14px;
+            color: #fff;
+            background-color: #126CFF; /* Background color behind the text */
+            display: inline-block; /* Ensures the background only wraps around the text */
+            padding: 4px 4px; /* Adjust padding for a better look */
+            border-radius: 6px; /* Rounded edges for a smooth look */
+            text-align: left;
+        }
+    </style>
+    </style>
+    <script>
+        function setFavicon() {
+            let favicon = document.querySelector("link[rel='icon']") || document.createElement("link");
+            favicon.rel = "icon";
+            favicon.type = "image/svg+xml";
+            favicon.href = `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'><path fill='%23126CFF' d='M224 0C100.3 0 0 100.3 0 224S100.3 448 224 448 448 347.7 448 224 347.7 0 224 0zM224 128c53 0 96 43 96 96s-43 96-96 96-96-43-96-96 43-96 96-96z'/></svg>`;
+            document.head.appendChild(favicon);
+        }
+        document.addEventListener("DOMContentLoaded", setFavicon);
+    </script>
+
+
+</head>
+    <header class="header">
+        <img src="bynder-logo-white.png" alt="Logo" class="logo">
+        <nav class="nav">
+            <a href="index.html" class="active">Link Builder</a>
+            <a href="terms.html">Terms & Privacy</a>
+        </nav>
+    </header>
+
+    <!-- Main switchable container -->
+    <div class="container-wrapper">
+        <!-- Container 1 (Default Form) -->
+        <div class="container active" id="container1">
+            <h2 id="baseURLLabel">Add Portal URL</h2>
+            <input type="text" id="baseURL" placeholder="🌐 dam.webshop.com" aria-labelledby="baseURLLabel">
+            <button class="switch-btn">↪</button>
+            <h2>Add Metaproperties and Options</h2>
+            <h3>Ensure proper capitalization. If a metaproperty or option name was changed at any point, make sure to use their <a href="https://support.bynder.com/hc/en-us/articles/22711704142866-Guidelines-for-Naming-Metaproperty-and-Metaproperty-Options#h_01JD0D752Y455VXZDH6X33TVCA" target="_blank">original name</a>!</h3>
+            <div class="form-group">
+                <div>
+                    <input type="text" id="field1" placeholder="🔧 Metaproperty 1">
+                </div>
+                <div>
+                    <input type="text" id="value1" placeholder="📋 Option 1">
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <input type="text" id="field2" placeholder="🔧 Metaproperty 2">
+                </div>
+                <div>
+                    <input type="text" id="value2" placeholder="📋 Option 2">
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <input type="text" id="field3" placeholder="🔧 Metaproperty 3">
+                </div>
+                <div>
+                    <input type="text" id="value3" placeholder="📋 Option 3">
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <input type="text" id="field4" placeholder="🔧 Metaproperty 4">
+                </div>
+                <div>
+                    <input type="text" id="value4" placeholder="📋 Option 4">
+                </div>
+            </div>
+
+            <h2>Add Tags</h2>
+            <h3>Ensure proper capitalization!</h3>
+            <div class="form-group">
+                <div>
+                    <input type="text" id="tag1" placeholder="🏷️ Tag 1">
+                </div>
+                <div>
+                    <input type="text" id="tag2" placeholder="🏷️ Tag 2">
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <input type="text" id="tag3" placeholder="🏷️ Tag 3">
+                </div>
+                <div>
+                    <input type="text" id="tag4" placeholder="🏷️ Tag 4">
+                </div>
+            </div>
+
+            <div class="output-container">
+                <p id="output"></p>
+                <i id="copy-icon" class="fas fa-copy" onclick="copyLink()" title="Copy to clipboard" style="cursor: pointer; margin-left: 10px;"></i>
+            </div>
+        </div>
+
+        <!-- Container 2 (Keyword Mode) -->
+        <div class="container" id="container2">
+            <button class="switch-btn">↩</button>
+            <h2 id="baseURLLabel">Add Portal URL</h2>
+            <input type="text" id="baseURL" placeholder="🌐 dam.webshop.com" aria-labelledby="baseURLLabel">
+            <h2>Add Keywords</h2>
+            <h3>This creates a search link using specified keywords.
+            </h3>
+            <div class="form-group">
+                <input type="text" id="keyword1" placeholder="🔑 Keyword 1">
+            </div>
+            <div class="form-group">
+                <input type="text" id="keyword2" placeholder="🔑 Keyword 2">
+            </div>
+            <div class="form-group">
+                <input type="text" id="keyword3" placeholder="🔑 Keyword 3">
+            </div>
+            <div class="form-group">
+                <input type="text" id="keyword4" placeholder="🔑 Keyword 4">
+            </div>
+
+            <div class="output-container">
+                <p id="output2"></p>
+                <i id="copy-icon-2" class="fas fa-copy" onclick="copyLink2()" title="Copy to clipboard" style="cursor: pointer; margin-left: 10px;"></i>
+            </div>
+        </div>
+    </div>
+    <script>
+        let lastScrollY = window.scrollY;
+        const header = document.querySelector(".header");
+    
+        window.addEventListener("scroll", () => {
+            if (window.scrollY > lastScrollY) {
+                // User is scrolling down → Hide header
+                header.classList.add("hidden");
+            } else {
+                // User is scrolling up → Show header
+                header.classList.remove("hidden");
+            }
+            lastScrollY = window.scrollY; // Update last scroll position
+        });
+    </script>
+    
+<script 
+src="script.js">
+</script>
+</body>
+</html>
