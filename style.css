@@ -77,7 +77,6 @@ html, body {
     max-width: 970px;
     padding: 25px;
     border-radius: 6px;
-    box-shadow: 0px 0px 20px rgba(50, 146, 184, 0.3);
     position: relative;
     left: 50%;
     transform: translateX(-50%);
