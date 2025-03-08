@@ -1,9 +1,7 @@
-// ✅ Function to sanitize metaproperty names, values, and tags
 function sanitizeDatabaseName(input) {
     return input.replace(/[^a-zA-Z0-9-]/g, "_"); // Replace invalid characters with "_"
 }
 
-// ✅ Handling container switching and input event listeners
 
 document.addEventListener("DOMContentLoaded", function () {
     let currentContainer = 0;
@@ -11,10 +9,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const switchButtons = document.querySelectorAll(".switch-btn");
     let storedBaseURL = ""; // Store baseURL value when switching
 
-    // Ensure the first container is visible initially
     containers[currentContainer].classList.add("active");
 
-    // ✅ Function to handle real-time link generation
     function handleInputChange() {
         if (currentContainer === 0) {
             generateLink();
@@ -23,45 +19,35 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // ✅ Attach event listeners to all input fields for live updates
     document.querySelectorAll("input").forEach(input => {
         input.addEventListener("input", handleInputChange);
     });
 
-    // ✅ Attach event listeners to switch buttons
     switchButtons.forEach(button => {
         button.addEventListener("click", function () {
-            // Store the baseURL value before switching
             const currentBaseURLInput = containers[currentContainer].querySelector("#baseURL");
             if (currentBaseURLInput) {
                 storedBaseURL = currentBaseURLInput.value;
             }
 
-            // Hide the current container
             containers[currentContainer].classList.remove("active");
 
-            // Switch active container
             currentContainer = (currentContainer + 1) % containers.length;
 
-            // Show the new container
             containers[currentContainer].classList.add("active");
 
-            // Restore the baseURL value in the new container
             const newBaseURLInput = containers[currentContainer].querySelector("#baseURL");
             if (newBaseURLInput) {
                 newBaseURLInput.value = storedBaseURL;
             }
 
-            // Generate the correct link based on the active container
             handleInputChange(); // Ensures the link updates on switch
         });
     });
 
-    // ✅ Generate an initial link if fields are prefilled
     handleInputChange();
 });
 
-// ✅ Function to generate the link for container1 (metaproperty-based & tag-based)
 function generateLink() {
     const baseURL = document.querySelector("#container1 #baseURL").value.trim();
     const outputElement = document.getElementById("output");
@@ -73,7 +59,6 @@ function generateLink() {
 
     const params = [];
 
-    // ✅ Apply sanitization ONLY to metaproperties (Not tags)
     for (let i = 1; i <= 4; i++) {
         const field = document.getElementById(`field${i}`).value.trim();
         const value = document.getElementById(`value${i}`).value.trim();
@@ -87,7 +72,7 @@ function generateLink() {
     }
 
     if (params.length === 0) {
-        outputElement.innerText = "Please enter at least one metaproperty or tag.";
+        outputElement.innerText = "Please enter at least one metaproperty & option or tag.";
         return;
     }
 
@@ -98,7 +83,6 @@ function generateLink() {
     outputElement.innerHTML = `<a href="${generatedLink}" target="_blank">${generatedLink}</a>`;
 }
 
-// ✅ Function to generate the keyword-based search link
 function generateKeywordLink() {
     const baseURL = document.querySelector("#container2 #baseURL").value.trim();
     const outputElement = document.getElementById("output2");
@@ -128,7 +112,6 @@ function generateKeywordLink() {
     outputElement.innerHTML = `<a href="${generatedLink}" target="_blank">${generatedLink}</a>`;
 }
 document.addEventListener("DOMContentLoaded", function () {
-    // Attach click event to all copy icons dynamically
     document.querySelectorAll(".fas.fa-copy").forEach(copyIcon => {
         copyIcon.addEventListener("click", function () {
             const outputContainer = this.closest(".output-container"); // Find parent container
@@ -138,12 +121,10 @@ document.addEventListener("DOMContentLoaded", function () {
             if (linkElement) {
                 const link = linkElement.href;
                 navigator.clipboard.writeText(link).then(() => {
-                    // Change the clicked copy icon to a green checkmark
                     this.classList.remove("fa-copy");
                     this.classList.add("fa-check");
                     this.style.color = "#28a745"; // Green color
 
-                    // Revert back to the copy icon after 1.5 seconds
                     setTimeout(() => {
                         this.classList.remove("fa-check");
                         this.classList.add("fa-copy");
@@ -158,6 +139,24 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
-function clearInput(inputId) {
-    document.getElementById(inputId).value = "";
-}
+document.addEventListener("DOMContentLoaded", function () {
+    const baseURLInputs = document.querySelectorAll("#baseURL");
+
+    baseURLInputs.forEach(input => {
+        input.addEventListener("blur", function () {
+            let value = input.value.trim();
+
+            const validPattern = /^[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+){2,}$/;
+
+            if (value.length > 0 && !validPattern.test(value)) {
+                input.style.border = "1px solid red"; 
+            } else {
+                input.style.border = "1px solid #D1D5DB"; 
+            }
+        });
+
+        input.addEventListener("focus", function () {
+            input.style.border = "1px solid #D1D5DB"; 
+        });
+    });
+});
