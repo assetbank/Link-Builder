@@ -93,10 +93,10 @@
         label {
             font-size: 14px;
             color: #fff;
-            background-color: #126CFF; /* Background color behind the text */
-            display: inline-block; /* Ensures the background only wraps around the text */
-            padding: 4px 4px; /* Adjust padding for a better look */
-            border-radius: 6px; /* Rounded edges for a smooth look */
+            background-color: #126CFF; 
+            display: inline-block;
+            padding: 4px 4px; 
+            border-radius: 6px;
             text-align: left;
         }
     </style>
@@ -122,13 +122,14 @@
         </nav>
     </header>
 
-    <!-- Main switchable container -->
     <div class="container-wrapper">
-        <!-- Container 1 (Default Form) -->
         <div class="container active" id="container1">
-            <h2 id="baseURLLabel">Add Portal URL</h2>
-            <input type="text" id="baseURL" placeholder="🌐 dam.webshop.com" aria-labelledby="baseURLLabel">
-            <button class="switch-btn">↪</button>
+            <div class="baseURL-container">
+                <h2 id="baseURLLabel">Add Portal URL</h2>
+                <input type="text" id="baseURL" placeholder="🌐 dam.webshop.com" aria-labelledby="baseURLLabel">
+                <button class="switch-btn">↪</button>
+            </div>
+            
             <h2>Add Metaproperties and Options</h2>
             <h3>Ensure proper capitalization. If a metaproperty or option name was changed at any point, make sure to use their <a href="https://support.bynder.com/hc/en-us/articles/22711704142866-Guidelines-for-Naming-Metaproperty-and-Metaproperty-Options#h_01JD0D752Y455VXZDH6X33TVCA" target="_blank">original name</a>!</h3>
             <div class="form-group">
@@ -189,11 +190,13 @@
             </div>
         </div>
 
-        <!-- Container 2 (Keyword Mode) -->
         <div class="container" id="container2">
-            <button class="switch-btn">↩</button>
-            <h2 id="baseURLLabel">Add Portal URL</h2>
-            <input type="text" id="baseURL" placeholder="🌐 dam.webshop.com" aria-labelledby="baseURLLabel">
+            <div class="baseURL-container">
+                <h2 id="baseURLLabel">Add Portal URL</h2>
+                <input type="text" id="baseURL" placeholder="🌐 dam.webshop.com" aria-labelledby="baseURLLabel">
+                <button class="switch-btn">↩</button>
+            </div>
+            
             <h2>Add Keywords</h2>
             <h3>This creates a search link using specified keywords.
             </h3>
@@ -222,13 +225,10 @@
     
         window.addEventListener("scroll", () => {
             if (window.scrollY > lastScrollY) {
-                // User is scrolling down → Hide header
                 header.classList.add("hidden");
             } else {
-                // User is scrolling up → Show header
                 header.classList.remove("hidden");
             }
-            lastScrollY = window.scrollY; // Update last scroll position
         });
     </script>
     
