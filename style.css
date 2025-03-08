@@ -52,12 +52,6 @@
     transition: background 0.1s ease-in-out;
 }
 
-.nav a.active {
-    color: white;
-    background-color: rgba(18, 108, 255, 0.1);
-}
-
-
 body {
     margin-top: 150px;
 }
