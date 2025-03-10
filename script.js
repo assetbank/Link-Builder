@@ -9,9 +9,9 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".nav a").forEach(link => link.classList.remove("active"));
 
     if (currentPage === "" || currentPage === "index.html") {
-        document.querySelector('a[href="./"]').classList.add("active");
+        document.querySelector('a[href="index.html"]').classList.add("active");
     } else if (currentPage === "terms.html") {
-        document.querySelector('a[href="./terms"]').classList.add("active");
+        document.querySelector('a[href="terms.html"]').classList.add("active");
     }
 });
 
@@ -172,3 +172,73 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+    // ✅ Base URL Sync using Local Storage
+    const baseURLInputs = document.querySelectorAll("#baseURL");
+    if (baseURLInputs.length > 0) {
+        const storedBaseURL = localStorage.getItem("baseURL");
+        if (storedBaseURL) {
+            baseURLInputs.forEach(input => input.value = storedBaseURL);
+        }
+        baseURLInputs.forEach(input => {
+            input.addEventListener("input", function () {
+                localStorage.setItem("baseURL", input.value.trim());
+                generateAllPremadeLinks(); // Regenerate all links on change
+            });
+        });
+    }
+    window.addEventListener("storage", function (event) {
+        if (event.key === "baseURL") {
+            baseURLInputs.forEach(input => input.value = event.newValue || "");
+            generateAllPremadeLinks();
+        }
+    });
+    
+// ✅ Functions to generate premade links dynamically
+function generateAddedYesterdayLink() {
+    updateLink("outputAddedYesterday", "/media/?resetsearch&field=dateCreated&value=lastday&filterType=add&filterkey=savedFilters&disableModal=false&viewType=grid");
+}
+
+function generateAddedLastWeekLink() {
+    updateLink("outputAddedLastWeek", "/media/?resetsearch&field=dateCreated&value=lastweek&filterType=add&filterkey=savedFilters&disableModal=false&viewType=grid");
+}
+
+function generateWatermarkedAssetsLink() {
+    updateLink("outputWatermarkedAssets", "/media/?resetsearch&field=watermark&value=1");
+}
+
+function generateArchivedAssetsLink() {
+    updateLink("outputArchivedAssets", "/media/?field=archive&value=1");
+}
+
+function generatePublicAssetsLink() {
+    updateLink("outputPublicAssets", "/media?field=isPublic&value=1");
+}
+
+function generateLimitedUsageAssetsLink() {
+    updateLink("outputLimitedUsageAssets", "/media/?field=keyVisual&value=1");
+}
+
+function generateSentForReviewLink() {
+    updateLink("outputSentForReview", "/media/?field=audit&value=1");
+}
+
+// ✅ Helper function to update link elements
+function updateLink(outputId, path) {
+    const baseURL = localStorage.getItem("baseURL") || "";
+    if (!baseURL) return;
+    const fullLink = `https://${baseURL}${path}`;
+    document.getElementById(outputId).innerHTML = `<a href="${fullLink}" target="_blank">${fullLink}</a>`;
+}
+
+// ✅ Function to generate all premade links at once
+function generateAllPremadeLinks() {
+    generateAddedYesterdayLink();
+    generateAddedLastWeekLink();
+    generateWatermarkedAssetsLink();
+    generateArchivedAssetsLink();
+    generatePublicAssetsLink();
+    generateLimitedUsageAssetsLink();
+    generateSentForReviewLink();
+}
+
+document.addEventListener("DOMContentLoaded", generateAllPremadeLinks);
