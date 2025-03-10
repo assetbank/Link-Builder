@@ -242,3 +242,15 @@ function generateAllPremadeLinks() {
 }
 
 document.addEventListener("DOMContentLoaded", generateAllPremadeLinks);
+function updateLink(outputId, path) {
+    const baseURL = localStorage.getItem("baseURL") || "";
+    const outputElement = document.getElementById(outputId);
+
+    if (!baseURL) {
+        outputElement.innerText = "Please enter your portal's URL.";
+        return;
+    }
+
+    const fullLink = `https://${baseURL}${path}`;
+    outputElement.innerHTML = `<a href="${fullLink}" target="_blank">${fullLink}</a>`;
+}
