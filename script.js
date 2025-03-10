@@ -195,32 +195,33 @@ document.addEventListener("DOMContentLoaded", function () {
     
 // ✅ Functions to generate premade links dynamically
 function generateAddedYesterdayLink() {
-    updateLink("outputAddedYesterday", "/media/?resetsearch&field=dateCreated&value=lastday");
+    updateLink("outputAddedYesterday", "/media/?resetSearch&filterType=add&field=dateCreated&value=lastday");
 }
 
 function generateAddedLastWeekLink() {
-    updateLink("outputAddedLastWeek", "/media/?resetsearch&field=dateCreated&value=lastweek");
+    updateLink("outputAddedLastWeek", "/media/?resetSearch&filterType=add&field=dateCreated&value=lastweek");
 }
 
 function generateWatermarkedAssetsLink() {
-    updateLink("outputWatermarkedAssets", "/media/?resetsearch&field=watermark&value=1");
+    updateLink("outputWatermarkedAssets", "/media/?resetSearch&filterType=add&field=watermark&value=1");
 }
 
 function generateArchivedAssetsLink() {
-    updateLink("outputArchivedAssets", "/media/?field=archive&value=1");
+    updateLink("outputArchivedAssets", "/media/?resetSearch&filterType=add&field=archive&value=1");
 }
 
 function generatePublicAssetsLink() {
-    updateLink("outputPublicAssets", "/media?field=isPublic&value=1");
+    updateLink("outputPublicAssets", "/media/?resetSearch&filterType=add&field=isPublic&value=1");
 }
 
 function generateLimitedUsageAssetsLink() {
-    updateLink("outputLimitedUsageAssets", "/media/?field=keyVisual&value=1");
+    updateLink("outputLimitedUsageAssets", "/media/?resetSearch&filterType=add&field=keyVisual&value=1");
 }
 
 function generateSentForReviewLink() {
-    updateLink("outputSentForReview", "/media/?field=audit&value=1");
+    updateLink("outputSentForReview", "/media/?resetSearch&filterType=add&field=audit&value=1");
 }
+
 
 // ✅ Helper function to update link elements
 function updateLink(outputId, path) {
