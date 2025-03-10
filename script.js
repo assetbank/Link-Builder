@@ -195,11 +195,11 @@ document.addEventListener("DOMContentLoaded", function () {
     
 // ✅ Functions to generate premade links dynamically
 function generateAddedYesterdayLink() {
-    updateLink("outputAddedYesterday", "/media/?resetsearch&field=dateCreated&value=lastday&filterType=add&filterkey=savedFilters&disableModal=false&viewType=grid");
+    updateLink("outputAddedYesterday", "/media/?resetsearch&field=dateCreated&value=lastday");
 }
 
 function generateAddedLastWeekLink() {
-    updateLink("outputAddedLastWeek", "/media/?resetsearch&field=dateCreated&value=lastweek&filterType=add&filterkey=savedFilters&disableModal=false&viewType=grid");
+    updateLink("outputAddedLastWeek", "/media/?resetsearch&field=dateCreated&value=lastweek");
 }
 
 function generateWatermarkedAssetsLink() {
