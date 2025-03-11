@@ -221,6 +221,10 @@ function generateLimitedUsageAssetsLink() {
 function generateSentForReviewLink() {
     updateLink("outputSentForReview", "/media/?resetSearch&filterType=add&field=audit&value=1");
 }
+function generateActiveAssetsLink() {
+    updateLink("outputActiveAssets", "/media/?resetSearch&filterType=add&field=isActive&value=true");
+}
+
 
 
 // ✅ Helper function to update link elements
@@ -240,6 +244,8 @@ function generateAllPremadeLinks() {
     generatePublicAssetsLink();
     generateLimitedUsageAssetsLink();
     generateSentForReviewLink();
+    generateSentForReviewLink();
+    generateActiveAssetsLink();
 }
 
 document.addEventListener("DOMContentLoaded", generateAllPremadeLinks);
