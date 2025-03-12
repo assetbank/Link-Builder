@@ -1,3 +1,18 @@
+// ✅ Function to sanitize and extract the base portal URL
+function sanitizeBaseURL(url) {
+    if (!url) return "";
+
+    // Remove protocol (http or https)
+    url = url.replace(/^(https?:\/\/)/, "");
+    
+    // Remove everything after the first "/" (if exists)
+    url = url.split("/")[0];
+
+    // Extract domain using regex to match text.text.text format
+    const match = url.match(/([a-zA-Z0-9-]+\.[a-zA-Z0-9-]+\.[a-zA-Z]+)/);
+    return match ? match[0] : url; // Return extracted domain or original input
+}
+
 function sanitizeDatabaseName(input) {
     return input.replace(/[^a-zA-Z0-9-]/g, "_"); // Replace invalid characters with "_"
 }
@@ -61,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function generateLink() {
-    const baseURL = document.querySelector("#container1 #baseURL").value.trim();
+    const baseURL = sanitizeBaseURL(document.querySelector("#container1 #baseURL").value.trim());
     const outputElement = document.getElementById("output");
 
     if (!baseURL) {
@@ -96,7 +111,7 @@ function generateLink() {
 }
 
 function generateKeywordLink() {
-    const baseURL = document.querySelector("#container2 #baseURL").value.trim();
+    const baseURL = sanitizeBaseURL(document.querySelector("#container2 #baseURL").value.trim());
     const outputElement = document.getElementById("output2");
 
     if (!baseURL) {
@@ -123,6 +138,7 @@ function generateKeywordLink() {
 
     outputElement.innerHTML = `<a href="${generatedLink}" target="_blank">${generatedLink}</a>`;
 }
+
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".fas.fa-copy").forEach(copyIcon => {
         copyIcon.addEventListener("click", function () {
@@ -151,51 +167,54 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
-// ✅ Function to sanitize and extract the base portal URL
-function sanitizeBaseURL(url) {
-    if (!url) return "";
 
-    // Remove protocol (http or https)
-    url = url.replace(/^(https?:\/\/)/, "");
-    
-    // Remove everything after the first "/" (if exists)
-    url = url.split("/")[0];
-
-    // Extract domain using regex to match text.text.text format
-    const match = url.match(/([a-zA-Z0-9-]+\.[a-zA-Z0-9-]+\.[a-zA-Z]+)/);
-    return match ? match[0] : url; // Return extracted domain or original input
-}
-
-// ✅ Modify the event listener to apply sanitization
+// ✅ Modify the event listener to apply sanitization to ALL baseURL fields
 document.addEventListener("DOMContentLoaded", function () {
-    let baseURLInput = document.querySelector("#baseURL");
-    if (baseURLInput) {
+    document.querySelectorAll("#baseURL").forEach(baseURLInput => {
         baseURLInput.addEventListener("blur", function () {
             this.value = sanitizeBaseURL(this.value);
         });
-    }
+    });
 });
 
-    // ✅ Base URL Sync using Local Storage
-    const baseURLInputs = document.querySelectorAll("#baseURL");
-    if (baseURLInputs.length > 0) {
-        const storedBaseURL = localStorage.getItem("baseURL");
-        if (storedBaseURL) {
-            baseURLInputs.forEach(input => input.value = storedBaseURL);
-        }
-        baseURLInputs.forEach(input => {
-            input.addEventListener("input", function () {
-                localStorage.setItem("baseURL", input.value.trim());
-                generateAllPremadeLinks(); // Regenerate all links on change
-            });
-        });
+// ✅ Base URL Sync using Local Storage (Ensures baseURL is sanitized immediately)
+const baseURLInputs = document.querySelectorAll("#baseURL");
+if (baseURLInputs.length > 0) {
+    let storedBaseURL = localStorage.getItem("baseURL");
+
+    if (storedBaseURL) {
+        storedBaseURL = sanitizeBaseURL(storedBaseURL); // Sanitize immediately
+        localStorage.setItem("baseURL", storedBaseURL); // Store sanitized value
+        baseURLInputs.forEach(input => input.value = storedBaseURL);
     }
-    window.addEventListener("storage", function (event) {
-        if (event.key === "baseURL") {
-            baseURLInputs.forEach(input => input.value = event.newValue || "");
-            generateAllPremadeLinks();
-        }
+
+    baseURLInputs.forEach(input => {
+        input.addEventListener("input", function () {
+            const sanitizedValue = sanitizeBaseURL(input.value.trim());
+            localStorage.setItem("baseURL", sanitizedValue); // Store sanitized value
+            generateAllPremadeLinks(); // Regenerate all links on change
+        });
     });
+}
+
+
+// ✅ Ensure premade links always use sanitized base URL
+function updateLink(outputId, path) {
+    let baseURL = localStorage.getItem("baseURL") || "";
+    baseURL = sanitizeBaseURL(baseURL); // Ensure sanitization before use
+
+    const outputElement = document.getElementById(outputId);
+
+    if (!baseURL) {
+        outputElement.innerText = "Please enter your portal's URL.";
+        return;
+    }
+
+    const fullLink = `https://${baseURL}${path}`;
+    outputElement.innerHTML = `<a href="${fullLink}" target="_blank">${fullLink}</a>`;
+}
+
+
     
 // ✅ Functions to generate premade links dynamically
 function generateAddedYesterdayLink() {
@@ -230,15 +249,6 @@ function generateActiveAssetsLink() {
 }
 
 
-
-// ✅ Helper function to update link elements
-function updateLink(outputId, path) {
-    const baseURL = localStorage.getItem("baseURL") || "";
-    if (!baseURL) return;
-    const fullLink = `https://${baseURL}${path}`;
-    document.getElementById(outputId).innerHTML = `<a href="${fullLink}" target="_blank">${fullLink}</a>`;
-}
-
 // ✅ Function to generate all premade links at once
 function generateAllPremadeLinks() {
     generateAddedYesterdayLink();
@@ -250,18 +260,4 @@ function generateAllPremadeLinks() {
     generateSentForReviewLink();
     generateSentForReviewLink();
     generateActiveAssetsLink();
-}
-
-document.addEventListener("DOMContentLoaded", generateAllPremadeLinks);
-function updateLink(outputId, path) {
-    const baseURL = localStorage.getItem("baseURL") || "";
-    const outputElement = document.getElementById(outputId);
-
-    if (!baseURL) {
-        outputElement.innerText = "Please enter your portal's URL.";
-        return;
-    }
-
-    const fullLink = `https://${baseURL}${path}`;
-    outputElement.innerHTML = `<a href="${fullLink}" target="_blank">${fullLink}</a>`;
 }
