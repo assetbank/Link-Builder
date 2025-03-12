@@ -151,27 +151,31 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+// ✅ Function to sanitize and extract the base portal URL
+function sanitizeBaseURL(url) {
+    if (!url) return "";
+
+    // Remove protocol (http or https)
+    url = url.replace(/^(https?:\/\/)/, "");
+    
+    // Remove everything after the first "/" (if exists)
+    url = url.split("/")[0];
+
+    // Extract domain using regex to match text.text.text format
+    const match = url.match(/([a-zA-Z0-9-]+\.[a-zA-Z0-9-]+\.[a-zA-Z]+)/);
+    return match ? match[0] : url; // Return extracted domain or original input
+}
+
+// ✅ Modify the event listener to apply sanitization
 document.addEventListener("DOMContentLoaded", function () {
-    const baseURLInputs = document.querySelectorAll("#baseURL"); 
-
-    baseURLInputs.forEach(input => {
-        input.addEventListener("blur", function () {
-            let value = input.value.trim();
-
-            const validPattern = /^[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+){2,}$/;
-
-            if (value.length > 0 && !validPattern.test(value)) {
-                input.style.border = "1px solid red"; 
-            } else {
-                input.style.border = "1px solid #D1D5DB"; 
-            }
+    let baseURLInput = document.querySelector("#baseURL");
+    if (baseURLInput) {
+        baseURLInput.addEventListener("blur", function () {
+            this.value = sanitizeBaseURL(this.value);
         });
-
-        input.addEventListener("focus", function () {
-            input.style.border = "1px solid #D1D5DB"; 
-        });
-    });
+    }
 });
+
     // ✅ Base URL Sync using Local Storage
     const baseURLInputs = document.querySelectorAll("#baseURL");
     if (baseURLInputs.length > 0) {
