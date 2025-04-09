@@ -2,8 +2,31 @@
 function sanitizeDatabaseName(input) {
     return input.replace(/[^a-zA-Z0-9-]/g, "_");
 }
+function syncBaseURLInputsWithLocalStorage() {
+    const baseURLInputs = document.querySelectorAll("#baseURL");
+
+    if (baseURLInputs.length === 0) return;
+
+    const storedBaseURL = localStorage.getItem("baseURL");
+    if (storedBaseURL) {
+        baseURLInputs.forEach(input => input.value = storedBaseURL);
+    }
+
+    baseURLInputs.forEach(input => {
+        input.addEventListener("input", function () {
+            localStorage.setItem("baseURL", input.value.trim());
+        });
+    });
+
+    window.addEventListener("storage", function (event) {
+        if (event.key === "baseURL") {
+            baseURLInputs.forEach(input => input.value = event.newValue || "");
+        }
+    });
+}
 
 document.addEventListener("DOMContentLoaded", function () {
+    syncBaseURLInputsWithLocalStorage();
     // ✅ Highlight active nav item
     const currentPage = window.location.pathname.split("/").pop();
     document.querySelectorAll(".nav a").forEach(link => link.classList.remove("active"));
