@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     
         const generatedLink = params.some(p => p.includes("metaproperty_"))
-            ? `https://${baseURL}/search/set/?resetsearch&${params.join("&")}&filterType=add&filterkey=savedFilters`
+            ? `https://${baseURL}/search/set/?resetsearch&${params.join("&")}&filterType=add`
             : `https://${baseURL}/search/media/?resetsearch&${params.join("&")}&filterType=add`;
     
         outputElement.innerHTML = `<a href="${generatedLink}" target="_blank">${generatedLink}</a>`;
@@ -183,7 +183,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
     
-        const generatedLink = `https://${baseURL}/search/set/?resetsearch&${keywordParams.join("&")}&filterType=add&filterKey=`;
+        const generatedLink = `https://${baseURL}/search/set/?resetsearch&${keywordParams.join("&")}&filterType=add`;
     
         outputElement.innerHTML = `<a href="${generatedLink}" target="_blank">${generatedLink}</a>`;
     }
