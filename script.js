@@ -218,138 +218,42 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 document.addEventListener("DOMContentLoaded", function () {
-    const baseURLInputs = document.querySelectorAll("#baseURL"); 
-
-    baseURLInputs.forEach(input => {
-        input.addEventListener("blur", function () {
-            let value = input.value.trim();
-
-            const validPattern = /^[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+){2,}$/;
-
-            if (value.length > 0 && !validPattern.test(value)) {
-                input.style.border = "1px solid red"; 
-            } else {
-                input.style.border = "1px solid #D1D5DB"; 
-            }
-        });
-
-        input.addEventListener("focus", function () {
-            input.style.border = "1px solid #D1D5DB"; 
-        });
-    });
-});
-document.addEventListener("DOMContentLoaded", function () {
     const baseURLInputs = document.querySelectorAll("#baseURL");
 
     if (baseURLInputs.length > 0) {
+        // ✅ Restore from localStorage
         const storedBaseURL = localStorage.getItem("baseURL");
         if (storedBaseURL) {
             baseURLInputs.forEach(input => input.value = storedBaseURL);
         }
 
+        // ✅ Add validation and storage logic
         baseURLInputs.forEach(input => {
             input.addEventListener("input", function () {
                 localStorage.setItem("baseURL", input.value.trim());
-                generateAllPremadeLinks();
+            });
+
+            input.addEventListener("blur", function () {
+                const value = input.value.trim();
+                const validPattern = /^[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+){2,}$/;
+
+                if (value.length > 0 && !validPattern.test(value)) {
+                    input.style.border = "1px solid red";
+                } else {
+                    input.style.border = "1px solid #D1D5DB";
+                }
+            });
+
+            input.addEventListener("focus", function () {
+                input.style.border = "1px solid #D1D5DB";
             });
         });
     }
 
+    // ✅ Handle localStorage sync across tabs (optional)
     window.addEventListener("storage", function (event) {
         if (event.key === "baseURL") {
             baseURLInputs.forEach(input => input.value = event.newValue || "");
-            generateAllPremadeLinks();
         }
     });
 });
-
-
-    // ✅ Base URL Sync using Local Storage
-    const baseURLInputs = document.querySelectorAll("#baseURL");
-    if (baseURLInputs.length > 0) {
-        const storedBaseURL = localStorage.getItem("baseURL");
-        if (storedBaseURL) {
-            baseURLInputs.forEach(input => input.value = storedBaseURL);
-        }
-        baseURLInputs.forEach(input => {
-            input.addEventListener("input", function () {
-                localStorage.setItem("baseURL", input.value.trim());
-                generateAllPremadeLinks(); // Regenerate all links on change
-            });
-        });
-    }
-    window.addEventListener("storage", function (event) {
-        if (event.key === "baseURL") {
-            baseURLInputs.forEach(input => input.value = event.newValue || "");
-            generateAllPremadeLinks();
-        }
-    });
-    
-// ✅ Functions to generate premade links dynamically
-function generateAddedYesterdayLink() {
-    updateLink("outputAddedYesterday", "/media/?resetSearch&filterType=add&field=dateCreated&value=lastday");
-}
-
-function generateAddedLastWeekLink() {
-    updateLink("outputAddedLastWeek", "/media/?resetSearch&filterType=add&field=dateCreated&value=lastweek");
-}
-
-function generateWatermarkedAssetsLink() {
-    updateLink("outputWatermarkedAssets", "/media/?resetSearch&filterType=add&field=watermark&value=1");
-}
-
-function generateArchivedAssetsLink() {
-    updateLink("outputArchivedAssets", "/media/?resetSearch&filterType=add&field=archive&value=1");
-}
-
-function generatePublicAssetsLink() {
-    updateLink("outputPublicAssets", "/media/?resetSearch&filterType=add&field=isPublic&value=1");
-}
-
-function generateLimitedUsageAssetsLink() {
-    updateLink("outputLimitedUsageAssets", "/media/?resetSearch&filterType=add&field=keyVisual&value=1");
-}
-
-function generateSentForReviewLink() {
-    updateLink("outputSentForReview", "/media/?resetSearch&filterType=add&field=audit&value=1");
-}
-function generateActiveAssetsLink() {
-    updateLink("outputActiveAssets", "/media/?resetSearch&filterType=add&field=isActive&value=true");
-}
-
-
-
-// ✅ Helper function to update link elements
-function updateLink(outputId, path) {
-    const baseURL = localStorage.getItem("baseURL") || "";
-    if (!baseURL) return;
-    const fullLink = `https://${baseURL}${path}`;
-    document.getElementById(outputId).innerHTML = `<a href="${fullLink}" target="_blank">${fullLink}</a>`;
-}
-
-// ✅ Function to generate all premade links at once
-function generateAllPremadeLinks() {
-    generateAddedYesterdayLink();
-    generateAddedLastWeekLink();
-    generateWatermarkedAssetsLink();
-    generateArchivedAssetsLink();
-    generatePublicAssetsLink();
-    generateLimitedUsageAssetsLink();
-    generateSentForReviewLink();
-    generateSentForReviewLink();
-    generateActiveAssetsLink();
-}
-
-document.addEventListener("DOMContentLoaded", generateAllPremadeLinks);
-function updateLink(outputId, path) {
-    const baseURL = localStorage.getItem("baseURL") || "";
-    const outputElement = document.getElementById(outputId);
-
-    if (!baseURL) {
-        outputElement.innerText = "Please enter your portal's URL.";
-        return;
-    }
-
-    const fullLink = `https://${baseURL}${path}`;
-    outputElement.innerHTML = `<a href="${fullLink}" target="_blank">${fullLink}</a>`;
-}
