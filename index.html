@@ -35,13 +35,12 @@
 
         }   
         h3 {
-            font-size: 14px;
+            font-size: 15px;
             font-weight:350;
             text-align: left;
             padding-left: 45px;
             padding-right: 45px;
             margin-top: -15px;
-            margin-bottom: 0px;
                 
         }       
         .form-group {
@@ -50,14 +49,10 @@
             align-items: center;
             margin-bottom: -5px;
             gap: 70px;
-            padding-top: 25px;
+            padding-top: 15px;
             padding-bottom: 15px;
         }
-        label i {
-            margin-right: 5px;
-            color: #ffff;
-            
-        }
+ 
         input {
             width: 75%; 
             padding: 8px;
@@ -67,20 +62,6 @@
             text-align: center;
             margin-bottom: 0px;
         }
-        button {
-            padding: 8px 14px;
-            background-color: #126CFF;
-            color: white;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: bold;
-            transition: background 0.3s;
-            margin: 20px;
-        }
-        button:hover {
-            background-color: #005BB5;
-        }
         .output-container {
             background: #E3F2FD;
             padding: 10px;
@@ -88,16 +69,8 @@
             word-wrap: break-word;
             text-align: center;
             font-size: 12px;
-            
-        }
-        label {
-            font-size: 14px;
-            color: #fff;
-            background-color: #126CFF; 
-            display: inline-block;
-            padding: 4px 4px; 
-            border-radius: 6px;
-            text-align: left;
+
+
         }
     </style>
     <script>
@@ -116,7 +89,7 @@
     <img src="bynder-logo-white.png" alt="Logo" class="logo">
     <nav class="nav">
         <a href="/Link-Builder/" id="nav-home">Link Builder</a>
-        <a href="/Link-Builder/premade/" id="nav-premade">Premade Links</a>
+        <a href="/Link-Builder/premade/" id="nav-premade">Status Links</a>
         <a href="/Link-Builder/terms/" id="nav-terms">Terms & Privacy</a>
     </nav>    
 </header>
@@ -127,6 +100,8 @@
         <div class="container active" id="container1">
             <div class="baseURL-container">
                 <h2 id="baseURLLabel">Add Portal URL</h2>
+                <h3>Ensure that the format is: <u>dam.bynder.com</u> — without any extra prefixes or suffixes.</h3>
+                <h3> &nbsp; </h3> 
                 <input type="text" id="baseURL" placeholder="🌐 dam.webshop.com" aria-labelledby="baseURLLabel">
                 <button class="switch-btn">↪</button>
             </div>
@@ -185,6 +160,19 @@
                 </div>
             </div>
 
+            <h2>Status Actions</h2>
+            <div class="button-grid">
+                <button data-status-param="field=dateCreated&value=lastday"><span>📅</span><br>Assets Added Yesterday</button>
+                <button data-status-param="field=dateCreated&value=lastweek"><span>📆</span><br>Assets Added Last Week</button>
+                <button data-status-param="field=watermark&value=1"><span>💧</span><br>Watermarked Assets</button>
+                <button data-status-param="field=archive&value=1"><span>📂</span><br>Archived Assets</button>
+                <button data-status-param="field=isActive&value=true"><span>✅</span><br>Active Assets</button>
+                <button data-status-param="field=isPublic&value=1"><span>🌍</span><br>Public Assets</button>
+                <button data-status-param="field=keyVisual&value=1"><span>🔒</span><br>Limited Usage Assets</button>
+                <button data-status-param="field=audit&value=1"><span>⏳</span><br>Sent for Review Assets</button>
+            </div>
+
+
             <div class="output-container">
                 <p id="output"></p>
                 <i id="copy-icon" class="fas fa-copy" onclick="copyLink()" title="Copy to clipboard" style="cursor: pointer; margin-left: 10px;"></i>
@@ -194,13 +182,15 @@
         <div class="container" id="container2">
             <div class="baseURL-container">
                 <h2 id="baseURLLabel">Add Portal URL</h2>
+                <h3>Ensure that the format is: <u>dam.bynder.com</u> — without any extra prefixes or suffixes.</h3>
+                <h3> &nbsp; </h3> 
                 <input type="text" id="baseURL" placeholder="🌐 dam.webshop.com" aria-labelledby="baseURLLabel">
                 <button class="switch-btn">↩</button>
             </div>
             
             <h2>Add Keywords</h2>
-            <h3>This creates a search link using specified keywords.
-            </h3>
+            <h3>This creates a search link using specified keywords.</h3>
+            
             <div class="form-group">
                 <input type="text" id="keyword1" placeholder="🔑 Keyword 1">
             </div>
@@ -212,6 +202,19 @@
             </div>
             <div class="form-group">
                 <input type="text" id="keyword4" placeholder="🔑 Keyword 4">
+            </div>
+
+            
+            <h2>Status Actions</h2>
+            <div class="button-grid">
+                <button data-status-param="field=dateCreated&value=lastday"><span>📅</span><br>Assets Added Yesterday</button>
+                <button data-status-param="field=dateCreated&value=lastweek"><span>📆</span><br>Assets Added Last Week</button>
+                <button data-status-param="field=watermark&value=1"><span>💧</span><br>Watermarked Assets</button>
+                <button data-status-param="field=archive&value=1"><span>📂</span><br>Archived Assets</button>
+                <button data-status-param="field=isActive&value=true"><span>✅</span><br>Active Assets</button>
+                <button data-status-param="field=isPublic&value=1"><span>🌍</span><br>Public Assets</button>
+                <button data-status-param="field=keyVisual&value=1"><span>🔒</span><br>Limited Usage Assets</button>
+                <button data-status-param="field=audit&value=1"><span>⏳</span><br>Sent for Review Assets</button>
             </div>
 
             <div class="output-container">
