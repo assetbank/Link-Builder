@@ -8,14 +8,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.querySelectorAll(".nav a").forEach(link => link.classList.remove("active"));
 
-if (currentPage === "" || currentPage === "index.html") {
-    const homeLink = document.querySelector('a[href="index.html"]');
-    if (homeLink) homeLink.classList.add("active");
-} else if (currentPage === "terms.html") {
-    const termsLink = document.querySelector('a[href="terms.html"]');
-    if (termsLink) termsLink.classList.add("active");
-}
-
+    if (currentPage === "" || currentPage === "index.html") {
+        document.querySelector('a[href="index.html"]').classList.add("active");
+    } else if (currentPage === "terms.html") {
+        document.querySelector('a[href="terms.html"]').classList.add("active");
+    }
+});
 
 document.addEventListener("DOMContentLoaded", function () {
     let currentContainer = 0;
@@ -44,6 +42,29 @@ document.addEventListener("DOMContentLoaded", function () {
             handleInputChange(); // Rebuilds the link on selection/deselection
         });
     });
+
+    switchButtons.forEach(button => {
+        button.addEventListener("click", function () {
+            const currentBaseURLInput = containers[currentContainer].querySelector("#baseURL");
+            if (currentBaseURLInput) {
+                storedBaseURL = currentBaseURLInput.value;
+            }
+
+            containers[currentContainer].classList.remove("active");
+            currentContainer = (currentContainer + 1) % containers.length;
+            containers[currentContainer].classList.add("active");
+
+            const newBaseURLInput = containers[currentContainer].querySelector("#baseURL");
+            if (newBaseURLInput) {
+                newBaseURLInput.value = storedBaseURL;
+            }
+
+            handleInputChange();
+        });
+    });
+
+    handleInputChange();
+});
 
 
     switchButtons.forEach(button => {
