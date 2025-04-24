@@ -8,12 +8,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.querySelectorAll(".nav a").forEach(link => link.classList.remove("active"));
 
-    if (currentPage === "" || currentPage === "index.html") {
-        document.querySelector('a[href="index.html"]').classList.add("active");
-    } else if (currentPage === "terms.html") {
-        document.querySelector('a[href="terms.html"]').classList.add("active");
-    }
-});
+if (currentPage === "" || currentPage === "index.html") {
+    const homeLink = document.querySelector('a[href="index.html"]');
+    if (homeLink) homeLink.classList.add("active");
+} else if (currentPage === "terms.html") {
+    const termsLink = document.querySelector('a[href="terms.html"]');
+    if (termsLink) termsLink.classList.add("active");
+}
+
 
 document.addEventListener("DOMContentLoaded", function () {
     let currentContainer = 0;
