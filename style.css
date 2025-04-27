@@ -162,7 +162,8 @@ input:focus {
     text-overflow: ellipsis;
     white-space: nowrap;
     max-width: calc(100% - 30px);
-    padding-left: 50px;
+    padding-left: 0;
+    text-align: center; /* ✅ Add this for full center alignment */
 }
 
 .output-container i {
