@@ -196,3 +196,26 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".hover-menu").forEach(menu => {
+        menu.addEventListener("click", function () {
+            const outputContainer = this.closest(".link-wrapper");
+            const outputElement = outputContainer.querySelector("p");
+            const linkElement = outputElement.querySelector("a");
+
+            if (linkElement) {
+                const link = linkElement.href;
+                navigator.clipboard.writeText(link).then(() => {
+                    this.textContent = "Copied!";
+                    setTimeout(() => {
+                        this.textContent = "Copy Link";
+                    }, 1000);
+                }).catch(err => {
+                    console.error("Failed to copy: ", err);
+                });
+            } else {
+                console.error("No link available to copy.");
+            }
+        });
+    });
+});
