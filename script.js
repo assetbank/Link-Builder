@@ -67,29 +67,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-    switchButtons.forEach(button => {
-        button.addEventListener("click", function () {
-            const currentBaseURLInput = containers[currentContainer].querySelector("#baseURL");
-            if (currentBaseURLInput) {
-                storedBaseURL = currentBaseURLInput.value;
-            }
-
-            containers[currentContainer].classList.remove("active");
-
-            currentContainer = (currentContainer + 1) % containers.length;
-
-            containers[currentContainer].classList.add("active");
-
-            const newBaseURLInput = containers[currentContainer].querySelector("#baseURL");
-            if (newBaseURLInput) {
-                newBaseURLInput.value = storedBaseURL;
-            }
-
-            handleInputChange(); // Ensures the link updates on switch
-        });
-    });
-
-
     function generateLink() {
         const baseURL = document.querySelector("#container1 #baseURL").value.trim();
         const outputElement = document.getElementById("output");
