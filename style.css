@@ -150,7 +150,7 @@ input:focus {
     word-wrap: break-word;
     overflow-wrap: break-word;
     white-space: normal;
-    max-width: 80%;
+    max-width: 65%;
     overflow: hidden;
     margin-left: auto;  
     margin-right: auto; 
