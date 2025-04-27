@@ -64,8 +64,6 @@ document.addEventListener("DOMContentLoaded", function () {
             handleInputChange();
         });
     });
-
-    handleInputChange();
 });
 
 
