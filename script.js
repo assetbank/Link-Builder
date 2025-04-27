@@ -24,6 +24,8 @@ document.addEventListener("DOMContentLoaded", function () {
     let storedBaseURL = ""; // Store baseURL value when switching
 
     containers[currentContainer].classList.add("active");
+// ✅ Ensure the first link or placeholder is displayed correctly
+setTimeout(handleInputChange, 0);
 
     function handleInputChange() {
         if (currentContainer === 0) {
