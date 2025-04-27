@@ -160,8 +160,6 @@ input:focus {
     flex-grow: 1;
     overflow: hidden;
     background-color: white;
-    border-color: white;
-    border: solid 1px;
     text-overflow: ellipsis;
     white-space: nowrap;
     max-width: calc(100% - 30px);
