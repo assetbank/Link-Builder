@@ -168,31 +168,31 @@ setTimeout(handleInputChange, 0);
     }
     
 
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".fas.fa-copy").forEach(copyIcon => {
-        copyIcon.addEventListener("click", function () {
-            const outputContainer = this.closest(".output-container"); // Find parent container
-            const outputElement = outputContainer.querySelector("p"); // Locate output text
-            const linkElement = outputElement.querySelector("a"); // Find the link
-
-            if (linkElement) {
-                const link = linkElement.href;
-                navigator.clipboard.writeText(link).then(() => {
-                    this.classList.remove("fa-copy");
-                    this.classList.add("fa-check");
-                    this.style.color = "#28a745"; // Green color
-
-                    setTimeout(() => {
-                        this.classList.remove("fa-check");
-                        this.classList.add("fa-copy");
-                        this.style.color = ""; // Reset to default color
-                    }, 1500);
-                }).catch(err => {
-                    console.error("Failed to copy: ", err);
-                });
-            } else {
-                console.error("No link available to copy.");
-            }
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".fas.fa-copy").forEach(copyIcon => {
+            copyIcon.addEventListener("click", function () {
+                const outputContainer = this.closest(".output-container");
+                const outputElement = outputContainer.querySelector("p");
+                const linkElement = outputElement.querySelector("a"); // Find the <a> inside <p>
+    
+                if (linkElement && linkElement.href) {
+                    navigator.clipboard.writeText(linkElement.href).then(() => {
+                        this.classList.remove("fa-copy");
+                        this.classList.add("fa-check");
+                        this.style.color = "#28a745"; // Green color
+    
+                        setTimeout(() => {
+                            this.classList.remove("fa-check");
+                            this.classList.add("fa-copy");
+                            this.style.color = ""; // Reset to default color
+                        }, 400);
+                    }).catch(err => {
+                        console.error("Failed to copy link: ", err);
+                    });
+                } else {
+                    console.error("No link available to copy.");
+                }
+            });
         });
     });
-});
+    
