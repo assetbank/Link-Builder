@@ -119,8 +119,14 @@ setTimeout(handleInputChange, 0);
             ? `https://${baseURL}/search/set/?resetsearch&${params.join("&")}&filterType=add`
             : `https://${baseURL}/search/media/?resetsearch&${params.join("&")}&filterType=add`;
     
-        outputElement.innerHTML = `<a href="${generatedLink}" target="_blank">${generatedLink}</a>`;
-    }
+            outputElement.innerHTML = ""; // Clear previous content
+            const linkEl = document.createElement("a");
+            linkEl.href = generatedLink;
+            linkEl.target = "_blank";
+            linkEl.rel = "noopener noreferrer";
+            linkEl.textContent = generatedLink;
+            outputElement.appendChild(linkEl);
+                }
     
 
 
@@ -164,8 +170,14 @@ setTimeout(handleInputChange, 0);
     
         const generatedLink = `https://${baseURL}/search/set/?resetsearch&${keywordParams.join("&")}&filterType=add`;
     
-        outputElement.innerHTML = `<a href="${generatedLink}" target="_blank">${generatedLink}</a>`;
-    }
+        outputElement.innerHTML = ""; // Clear previous content
+        const linkEl = document.createElement("a");
+        linkEl.href = generatedLink;
+        linkEl.target = "_blank";
+        linkEl.rel = "noopener noreferrer";
+        linkEl.textContent = generatedLink;
+        outputElement.appendChild(linkEl);
+            }
     
 
     document.addEventListener("DOMContentLoaded", function () {
