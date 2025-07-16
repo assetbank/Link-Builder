@@ -18,9 +18,11 @@
 }
 
 .logo {
-    display: block;
+    max-width: 5.79%;
+    height: auto;
     margin-right: 957px;
 }
+
 
 .logo img {
     max-width: 100%;
