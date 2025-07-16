@@ -18,10 +18,15 @@
 }
 
 .logo {
-    max-width: 5.79%;
-    height: auto;
+    display: block;
     margin-right: 957px;
 }
+
+.logo img {
+    max-width: 100%;
+    height: auto;
+}
+
 
 
 .nav {
