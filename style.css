@@ -1,46 +1,30 @@
 .header {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     background-color: #002332;
-    padding: 31.9px 40px;
+    padding: 32px 40px;
     position: fixed;
     width: 100%;
     top: 0;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 0;
     z-index: 1000;
     transition: transform 0.3s ease-in-out;
 }
 
 .header.hidden {
-    transform: translate(-50%, -150%);
+    transform: translateY(-150%);
 }
 
 .logo {
-    max-width: 5.79%;
-    height: auto;
-    margin-right: 957px;
+    height: 40px;
+    width: auto;
 }
-
-
-.logo img {
-    max-width: 100%;
-    height: auto;
-}
-
-
 
 .nav {
     display: flex;
-    justify-content: center;
     align-items: center;
     gap: 40px;
-    width: auto;
-    position: absolute;
-    left: 58%;
-    transform: translateX(-50%);
-    white-space: nowrap;
 }
 
 .nav a {
@@ -54,9 +38,9 @@
 }
 
 .nav a:hover {
-    color: #d3d3d3;    
-
+    color: #d3d3d3;
 }
+
 
 body {
     margin-top: 150px;
