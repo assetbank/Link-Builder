@@ -39,16 +39,6 @@ setTimeout(handleInputChange, 0);
         input.addEventListener("input", handleInputChange);
     });
 
-    document.getElementById("add-metaproperty-btn").addEventListener("click", function () {
-        const rows = document.querySelectorAll("#metaproperty-rows .metaproperty-row");
-        const n = rows.length + 1;
-        const row = document.createElement("div");
-        row.className = "form-group metaproperty-row";
-        row.innerHTML = `<div><input type="text" placeholder="🔧 Metaproperty ${n}"></div><div><input type="text" placeholder="📋 Option ${n}"></div>`;
-        row.querySelectorAll("input").forEach(input => input.addEventListener("input", handleInputChange));
-        document.getElementById("metaproperty-rows").appendChild(row);
-    });
-
     // ✅ Add event listeners to status action buttons (important!)
     document.querySelectorAll(".button-grid button").forEach(button => {
         button.addEventListener("click", function () {
@@ -193,8 +183,17 @@ setTimeout(handleInputChange, 0);
             }
     
 
-    document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll(".fas.fa-copy").forEach(copyIcon => {
+    document.getElementById("add-metaproperty-btn").addEventListener("click", function () {
+        const rows = document.querySelectorAll("#metaproperty-rows .metaproperty-row");
+        const n = rows.length + 1;
+        const row = document.createElement("div");
+        row.className = "form-group metaproperty-row";
+        row.innerHTML = `<div><input type="text" placeholder="🔧 Metaproperty ${n}"></div><div><input type="text" placeholder="📋 Option ${n}"></div>`;
+        row.querySelectorAll("input").forEach(input => input.addEventListener("input", generateLink));
+        document.getElementById("metaproperty-rows").appendChild(row);
+    });
+
+    document.querySelectorAll(".fas.fa-copy").forEach(copyIcon => {
             copyIcon.addEventListener("click", function () {
                 const outputContainer = this.closest(".output-container");
                 const outputElement = outputContainer.querySelector("p");
@@ -219,5 +218,3 @@ setTimeout(handleInputChange, 0);
                 }
             });
         });
-    });
-    
