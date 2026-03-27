@@ -98,12 +98,11 @@
 </div>
 
 <script>
-    let currentPage = window.location.pathname.split("/").pop();
-
-    if (currentPage === "index.html" || currentPage === "") {
-        document.getElementById("nav-home").classList.add("active");
-    } else if (currentPage === "terms.html") {
+    const pathname = window.location.pathname;
+    if (pathname.startsWith("/terms")) {
         document.getElementById("nav-terms").classList.add("active");
+    } else {
+        document.getElementById("nav-home").classList.add("active");
     }
 </script>
 <script>
@@ -116,7 +115,7 @@
         } else {
             header.classList.remove("hidden");
         }
-        lastScrollY = window.scrollY; 
+        lastScrollY = window.scrollY;
     });
 </script>
 

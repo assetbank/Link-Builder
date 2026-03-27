@@ -20,7 +20,6 @@
 .logo {
     max-width: 5.79%;
     height: auto;
-    margin-right: 957px;
 }
 
 
@@ -103,10 +102,6 @@ html, body {
 
 .switch-btn:hover {
     background-color: #00264C;
-}
-
-html {
-    scroll-behavior: smooth;
 }
 
 input {
@@ -229,7 +224,7 @@ input:focus {
 
 @media screen and (max-width: 690px) {
     #container1 #baseURL,
-    #container2 #baseURL {
+    #baseURL2 {
         width: 90%; 
         max-width: 350px;  
         box-sizing: border-box;
@@ -287,6 +282,30 @@ input:focus {
     }
 }
 
+.add-field-row {
+    display: flex;
+    justify-content: center;
+    margin: 4px 0 8px;
+}
+
+.add-field-btn {
+    background: none;
+    border: 1px dashed #9CB8E8;
+    border-radius: 6px;
+    color: #0545ac;
+    font-size: 12px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    padding: 5px 18px;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.add-field-btn:hover {
+    background-color: #ECF3FF;
+    border-color: #0545ac;
+}
+
 .button-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* 4 buttons per row */
@@ -307,7 +326,6 @@ input:focus {
     border: 1px solid #D1D5DB;
     background-color: transparent;
     color: #031026;
-    border-radius: 6px;
     cursor: pointer;
     transition: background 0.2s ease-in-out;
     display: flex;

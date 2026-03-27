@@ -11,73 +11,6 @@
     <title>Link Builder</title>
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <style>
-               body {
-            font-family: 'Inter', sans-serif;
-            background-color: #F7F8F9;
-            text-align: center;
-            padding: 5px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            height: auto;
-            overflow-y: auto;
-        }
-        h1 {
-            text-align: left;
-            font-size: 40px;
-            color: #031026;
-            padding: 10px 0px;
-            padding-left: 45px;
-    
-        }
-            
-        h2 {
-            text-align: left;
-            padding: 10px 0px;
-            padding-left: 45px;
-
-        }   
-        h3 {
-            font-size: 15px;
-            font-weight:350;
-            text-align: left;
-            padding-left: 45px;
-            padding-right: 45px;
-            margin-top: -15px;
-                
-        }       
-        .form-group {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: -5px;
-            gap: 70px;
-            padding-top: 15px;
-            padding-bottom: 15px;
-        }
- 
-        input {
-            width: 75%; 
-            padding: 8px;
-            border-radius: 6px;
-            border: 1px solid #D1D5DB;
-            font-size: 14px;
-            text-align: center;
-            margin-bottom: 0px;
-        }
-        .output-container {
-            background: #E3F2FD;
-            padding: 10px;
-            border-radius: 6px;
-            word-wrap: break-word;
-            text-align: center;
-
-
-
-        }
-    </style>
     <script>
         function setFavicon() {
             let favicon = document.querySelector("link[rel='icon']") || document.createElement("link");
@@ -114,37 +47,26 @@
             
             <h2>Add Metaproperties and Options</h2>
             <h3>Ensure proper capitalization. If a metaproperty or option name was changed at any point, make sure to use their <a href="https://support.bynder.com/hc/en-us/articles/22711704142866-Guidelines-for-Naming-Metaproperty-and-Metaproperty-Options#h_01JD0D752Y455VXZDH6X33TVCA" target="_blank">original name</a>!</h3>
-            <div class="form-group">
-                <div>
-                    <input type="text" id="field1" placeholder="🔧 Metaproperty 1">
+            <div id="metaproperty-rows">
+                <div class="form-group metaproperty-row">
+                    <div><input type="text" placeholder="🔧 Metaproperty 1"></div>
+                    <div><input type="text" placeholder="📋 Option 1"></div>
                 </div>
-                <div>
-                    <input type="text" id="value1" placeholder="📋 Option 1">
+                <div class="form-group metaproperty-row">
+                    <div><input type="text" placeholder="🔧 Metaproperty 2"></div>
+                    <div><input type="text" placeholder="📋 Option 2"></div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div>
-                    <input type="text" id="field2" placeholder="🔧 Metaproperty 2">
+                <div class="form-group metaproperty-row">
+                    <div><input type="text" placeholder="🔧 Metaproperty 3"></div>
+                    <div><input type="text" placeholder="📋 Option 3"></div>
                 </div>
-                <div>
-                    <input type="text" id="value2" placeholder="📋 Option 2">
-                </div>
-            </div>
-            <div class="form-group">
-                <div>
-                    <input type="text" id="field3" placeholder="🔧 Metaproperty 3">
-                </div>
-                <div>
-                    <input type="text" id="value3" placeholder="📋 Option 3">
+                <div class="form-group metaproperty-row">
+                    <div><input type="text" placeholder="🔧 Metaproperty 4"></div>
+                    <div><input type="text" placeholder="📋 Option 4"></div>
                 </div>
             </div>
-            <div class="form-group">
-                <div>
-                    <input type="text" id="field4" placeholder="🔧 Metaproperty 4">
-                </div>
-                <div>
-                    <input type="text" id="value4" placeholder="📋 Option 4">
-                </div>
+            <div class="add-field-row">
+                <button id="add-metaproperty-btn" class="add-field-btn">+ Add field</button>
             </div>
 
             <h2>Add Tags</h2>
@@ -187,10 +109,10 @@
 
         <div class="container" id="container2">
             <div class="baseURL-container">
-                <h2 id="baseURLLabel">Add Portal URL</h2>
+                <h2 id="baseURLLabel2">Add Portal URL</h2>
                 <h3>Ensure that the format is: <u>dam.bynder.com</u> — without any extra prefixes or suffixes.</h3>
-                <h3> &nbsp; </h3> 
-                <input type="text" id="baseURL" placeholder="🌐 dam.webshop.com" aria-labelledby="baseURLLabel">
+                <h3> &nbsp; </h3>
+                <input type="text" id="baseURL2" placeholder="🌐 dam.webshop.com" aria-labelledby="baseURLLabel2">
                 <button class="switch-btn">↩</button>
             </div>
             
@@ -229,21 +151,7 @@
             </div>
         </div>
     </div>
-    <script>
-        let lastScrollY = window.scrollY;
-        const header = document.querySelector(".header");
-    
-        window.addEventListener("scroll", () => {
-            if (window.scrollY > lastScrollY) {
-                header.classList.add("hidden");
-            } else {
-                header.classList.remove("hidden");
-            }
-        });
-    </script>
-    
-<script 
-src="script.js">
-</script>
+
+<script src="script.js"></script>
 </body>
 </html>
