@@ -39,6 +39,16 @@ setTimeout(handleInputChange, 0);
         input.addEventListener("input", handleInputChange);
     });
 
+    document.getElementById("add-metaproperty-btn").addEventListener("click", function () {
+        const rows = document.querySelectorAll("#metaproperty-rows .metaproperty-row");
+        const n = rows.length + 1;
+        const row = document.createElement("div");
+        row.className = "form-group metaproperty-row";
+        row.innerHTML = `<div><input type="text" placeholder="🔧 Metaproperty ${n}"></div><div><input type="text" placeholder="📋 Option ${n}"></div>`;
+        row.querySelectorAll("input").forEach(input => input.addEventListener("input", handleInputChange));
+        document.getElementById("metaproperty-rows").appendChild(row);
+    });
+
     // ✅ Add event listeners to status action buttons (important!)
     document.querySelectorAll(".button-grid button").forEach(button => {
         button.addEventListener("click", function () {
@@ -83,14 +93,17 @@ setTimeout(handleInputChange, 0);
         // Track whether we have a metaproperty, a tag, or a selected status action
         let hasValidInput = false;
     
-        for (let i = 1; i <= 4; i++) {
-            const field = document.getElementById(`field${i}`).value.trim();
-            const value = document.getElementById(`value${i}`).value.trim();
+        document.querySelectorAll("#metaproperty-rows .metaproperty-row").forEach(function (row) {
+            const inputs = row.querySelectorAll("input");
+            const field = inputs[0].value.trim();
+            const value = inputs[1].value.trim();
             if (field && value) {
                 hasValidInput = true;
                 params.push(`field=metaproperty_${encodeURIComponent(sanitizeDatabaseName(field))}&value=${encodeURIComponent(sanitizeDatabaseName(value))}`);
             }
-    
+        });
+
+        for (let i = 1; i <= 4; i++) {
             const tag = document.getElementById(`tag${i}`).value.trim();
             if (tag) {
                 hasValidInput = true;
