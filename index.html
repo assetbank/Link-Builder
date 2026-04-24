@@ -9,75 +9,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Link Builder</title>
-    <link rel="stylesheet" href="/style.css">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q0S8FCFFCK"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-Q0S8FCFFCK');
+    </script>
+    <link rel="stylesheet" href="/style.css?v=2">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <style>
-               body {
-            font-family: 'Inter', sans-serif;
-            background-color: #F7F8F9;
-            text-align: center;
-            padding: 5px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            height: auto;
-            overflow-y: auto;
-        }
-        h1 {
-            text-align: left;
-            font-size: 40px;
-            color: #031026;
-            padding: 10px 0px;
-            padding-left: 45px;
-    
-        }
-            
-        h2 {
-            text-align: left;
-            padding: 10px 0px;
-            padding-left: 45px;
-
-        }   
-        h3 {
-            font-size: 15px;
-            font-weight:350;
-            text-align: left;
-            padding-left: 45px;
-            padding-right: 45px;
-            margin-top: -15px;
-                
-        }       
-        .form-group {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: -5px;
-            gap: 70px;
-            padding-top: 15px;
-            padding-bottom: 15px;
-        }
- 
-        input {
-            width: 75%; 
-            padding: 8px;
-            border-radius: 6px;
-            border: 1px solid #D1D5DB;
-            font-size: 14px;
-            text-align: center;
-            margin-bottom: 0px;
-        }
-        .output-container {
-            background: #E3F2FD;
-            padding: 10px;
-            border-radius: 6px;
-            word-wrap: break-word;
-            text-align: center;
-
-
-
-        }
-    </style>
     <script>
         function setFavicon() {
             let favicon = document.querySelector("link[rel='icon']") || document.createElement("link");
@@ -103,119 +44,126 @@
 
 
     <div class="container-wrapper">
-        <div class="container active" id="container1">
+        <div class="container">
+
+            <div class="tab-bar">
+                <button class="tab-btn active" data-target="panel1">Metaproperties &amp; Tags</button>
+                <button class="tab-btn" data-target="panel2">Keywords</button>
+            </div>
+
             <div class="baseURL-container">
                 <h2 id="baseURLLabel">Add Portal URL</h2>
-                <h3>Ensure that the format is: <u>dam.bynder.com</u> — without any extra prefixes or suffixes.</h3>
-                <h3> &nbsp; </h3> 
-                <input type="text" id="baseURL" placeholder="🌐 dam.webshop.com" aria-labelledby="baseURLLabel">
-                <button class="switch-btn">↪</button>
-            </div>
-            
-            <h2>Add Metaproperties and Options</h2>
-            <h3>Ensure proper capitalization. If a metaproperty or option name was changed at any point, make sure to use their <a href="https://support.bynder.com/hc/en-us/articles/22711704142866-Guidelines-for-Naming-Metaproperty-and-Metaproperty-Options#h_01JD0D752Y455VXZDH6X33TVCA" target="_blank">original name</a>!</h3>
-            <div id="metaproperty-rows">
-                <div class="form-group metaproperty-row">
-                    <div><input type="text" id="field1" placeholder="🔧 Metaproperty 1"></div>
-                    <div><input type="text" id="value1" placeholder="📋 Option 1"></div>
-                </div>
-                <div class="form-group metaproperty-row">
-                    <div><input type="text" id="field2" placeholder="🔧 Metaproperty 2"></div>
-                    <div><input type="text" id="value2" placeholder="📋 Option 2"></div>
-                </div>
-                <div class="form-group metaproperty-row">
-                    <div><input type="text" id="field3" placeholder="🔧 Metaproperty 3"></div>
-                    <div><input type="text" id="value3" placeholder="📋 Option 3"></div>
-                </div>
-                <div class="form-group metaproperty-row">
-                    <div><input type="text" id="field4" placeholder="🔧 Metaproperty 4"></div>
-                    <div><input type="text" id="value4" placeholder="📋 Option 4"></div>
-                </div>
-            </div>
-            <div style="display:flex; justify-content:center; margin: 4px 0 8px;">
-                <button type="button" id="add-metaproperty-btn" style="background:none; border:1px dashed #9CB8E8; border-radius:6px; color:#0545ac; font-size:12px; font-family:'Inter',sans-serif; font-weight:500; padding:5px 18px; cursor:pointer;">+ Add field</button>
+                <input type="text" id="baseURL" placeholder="🌐 dam.lifestyle.com" aria-labelledby="baseURLLabel">
             </div>
 
-            <h2>Add Tags</h2>
-            <h3>Ensure proper capitalization!</h3>
-            <div class="form-group">
-                <div>
-                    <input type="text" id="tag1" placeholder="🏷️ Tag 1">
+            <div class="tab-panel active" id="panel1">
+                <hr class="section-divider">
+                <h2>Add Metaproperties and Options</h2>
+                <h3>Ensure proper capitalization. If a metaproperty or option name was changed at any point, make sure to use their <a href="https://support.bynder.com/hc/en-us/articles/6190351879186-Create-Metaproperties#h_01KNM026Q3NVKNYR38QH1W90JJ" target="_blank">database name</a>!</h3>
+                <div id="metaproperty-rows">
+                    <div class="form-group metaproperty-row">
+                        <div><input type="text" id="field1" placeholder="🔧 Metaproperty 1"></div>
+                        <div><input type="text" id="value1" placeholder="📋 Option 1"></div>
+                    </div>
+                    <div class="form-group metaproperty-row">
+                        <div><input type="text" id="field2" placeholder="🔧 Metaproperty 2"></div>
+                        <div><input type="text" id="value2" placeholder="📋 Option 2"></div>
+                    </div>
+                    <div class="form-group metaproperty-row">
+                        <div><input type="text" id="field3" placeholder="🔧 Metaproperty 3"></div>
+                        <div><input type="text" id="value3" placeholder="📋 Option 3"></div>
+                    </div>
+                    <div class="form-group metaproperty-row">
+                        <div><input type="text" id="field4" placeholder="🔧 Metaproperty 4"></div>
+                        <div><input type="text" id="value4" placeholder="📋 Option 4"></div>
+                    </div>
                 </div>
-                <div>
-                    <input type="text" id="tag2" placeholder="🏷️ Tag 2">
+                <div style="display:flex; justify-content:center; margin: 4px 0 8px;">
+                    <button type="button" id="add-metaproperty-btn" style="background:none; border:1px dashed #9CB8E8; border-radius:6px; color:#0545ac; font-size:18px; font-family:'Inter',sans-serif; font-weight:400; padding:2px 14px; cursor:pointer;">+</button>
+                </div>
+
+                <hr class="section-divider">
+                <h2>Add Tags</h2>
+                <h3>Ensure proper capitalization!</h3>
+                <div id="tag-rows">
+                    <div class="form-group tag-row">
+                        <div><input type="text" id="tag1" placeholder="🏷️ Tag 1"></div>
+                        <div><input type="text" id="tag2" placeholder="🏷️ Tag 2"></div>
+                    </div>
+                    <div class="form-group tag-row">
+                        <div><input type="text" id="tag3" placeholder="🏷️ Tag 3"></div>
+                        <div><input type="text" id="tag4" placeholder="🏷️ Tag 4"></div>
+                    </div>
+                </div>
+                <div style="display:flex; justify-content:center; margin: 4px 0 8px;">
+                    <button type="button" id="add-tag-btn" style="background:none; border:1px dashed #9CB8E8; border-radius:6px; color:#0545ac; font-size:18px; font-family:'Inter',sans-serif; font-weight:400; padding:2px 14px; cursor:pointer;">+</button>
+                </div>
+
+                <hr class="section-divider">
+                <h2>Status Actions</h2>
+                <div class="button-grid" id="status-grid-1">
+                    <button data-status-param="field=dateCreated&value=lastday"><span>📅</span><br>Assets Added Yesterday</button>
+                    <button data-status-param="field=dateCreated&value=lastweek"><span>📆</span><br>Assets Added Last Week</button>
+                    <button data-status-param="field=watermark&value=1"><span>💧</span><br>Watermarked Assets</button>
+                    <button data-status-param="field=archive&value=1"><span>📂</span><br>Archived Assets</button>
+                    <button data-status-param="field=isActive&value=true"><span>✅</span><br>Active Assets</button>
+                    <button data-status-param="field=isPublic&value=1"><span>🌍</span><br>Public Assets</button>
+                    <button data-status-param="field=keyVisual&value=1"><span>🔒</span><br>Limited Usage Assets</button>
+                    <button data-status-param="field=audit&value=1"><span>⏳</span><br>Sent for Review Assets</button>
+                </div>
+
+                <div class="output-container" id="output-box-1" title="Click to copy">
+                    <div class="output-label">Generated link</div>
+                    <div class="output-body">
+                        <p id="output" class="empty-state">Your generated link will appear here</p>
+                    </div>
                 </div>
             </div>
-            <div class="form-group">
-                <div>
-                    <input type="text" id="tag3" placeholder="🏷️ Tag 3">
+
+            <div class="tab-panel" id="panel2">
+                <hr class="section-divider">
+                <h2>Add Keywords</h2>
+                <h3>This creates a search link using specified keywords.</h3>
+
+                <div id="keyword-rows">
+                    <div class="form-group keyword-row">
+                        <input type="text" id="keyword1" placeholder="🔑 Keyword 1">
+                    </div>
+                    <div class="form-group keyword-row">
+                        <input type="text" id="keyword2" placeholder="🔑 Keyword 2">
+                    </div>
+                    <div class="form-group keyword-row">
+                        <input type="text" id="keyword3" placeholder="🔑 Keyword 3">
+                    </div>
+                    <div class="form-group keyword-row">
+                        <input type="text" id="keyword4" placeholder="🔑 Keyword 4">
+                    </div>
                 </div>
-                <div>
-                    <input type="text" id="tag4" placeholder="🏷️ Tag 4">
+                <div style="display:flex; justify-content:center; margin: 4px 0 8px;">
+                    <button type="button" id="add-keyword-btn" style="background:none; border:1px dashed #9CB8E8; border-radius:6px; color:#0545ac; font-size:18px; font-family:'Inter',sans-serif; font-weight:400; padding:2px 14px; cursor:pointer;">+</button>
+                </div>
+
+                <hr class="section-divider">
+                <h2>Status Actions</h2>
+                <div class="button-grid" id="status-grid-2">
+                    <button data-status-param="field=dateCreated&value=lastday"><span>📅</span><br>Assets Added Yesterday</button>
+                    <button data-status-param="field=dateCreated&value=lastweek"><span>📆</span><br>Assets Added Last Week</button>
+                    <button data-status-param="field=watermark&value=1"><span>💧</span><br>Watermarked Assets</button>
+                    <button data-status-param="field=archive&value=1"><span>📂</span><br>Archived Assets</button>
+                    <button data-status-param="field=isActive&value=true"><span>✅</span><br>Active Assets</button>
+                    <button data-status-param="field=isPublic&value=1"><span>🌍</span><br>Public Assets</button>
+                    <button data-status-param="field=keyVisual&value=1"><span>🔒</span><br>Limited Usage Assets</button>
+                    <button data-status-param="field=audit&value=1"><span>⏳</span><br>Sent for Review Assets</button>
+                </div>
+
+                <div class="output-container" id="output-box-2" title="Click to copy">
+                    <div class="output-label">Generated link</div>
+                    <div class="output-body">
+                        <p id="output2" class="empty-state">Your generated link will appear here</p>
+                    </div>
                 </div>
             </div>
 
-            <h2>Status Actions</h2>
-            <div class="button-grid">
-                <button data-status-param="field=dateCreated&value=lastday"><span>📅</span><br>Assets Added Yesterday</button>
-                <button data-status-param="field=dateCreated&value=lastweek"><span>📆</span><br>Assets Added Last Week</button>
-                <button data-status-param="field=watermark&value=1"><span>💧</span><br>Watermarked Assets</button>
-                <button data-status-param="field=archive&value=1"><span>📂</span><br>Archived Assets</button>
-                <button data-status-param="field=isActive&value=true"><span>✅</span><br>Active Assets</button>
-                <button data-status-param="field=isPublic&value=1"><span>🌍</span><br>Public Assets</button>
-                <button data-status-param="field=keyVisual&value=1"><span>🔒</span><br>Limited Usage Assets</button>
-                <button data-status-param="field=audit&value=1"><span>⏳</span><br>Sent for Review Assets</button>
-            </div>
-
-
-            <div class="output-container">
-                <p id="output"></p>
-                <i class="fas fa-copy" title="Copy to clipboard" style="cursor: pointer; margin-left: 10px;"></i>
-            </div>
-        </div>
-
-        <div class="container" id="container2">
-            <div class="baseURL-container">
-                <h2 id="baseURLLabel">Add Portal URL</h2>
-                <h3>Ensure that the format is: <u>dam.bynder.com</u> — without any extra prefixes or suffixes.</h3>
-                <h3> &nbsp; </h3> 
-                <input type="text" id="baseURL" placeholder="🌐 dam.webshop.com" aria-labelledby="baseURLLabel">
-                <button class="switch-btn">↩</button>
-            </div>
-            
-            <h2>Add Keywords</h2>
-            <h3>This creates a search link using specified keywords.</h3>
-            
-            <div class="form-group">
-                <input type="text" id="keyword1" placeholder="🔑 Keyword 1">
-            </div>
-            <div class="form-group">
-                <input type="text" id="keyword2" placeholder="🔑 Keyword 2">
-            </div>
-            <div class="form-group">
-                <input type="text" id="keyword3" placeholder="🔑 Keyword 3">
-            </div>
-            <div class="form-group">
-                <input type="text" id="keyword4" placeholder="🔑 Keyword 4">
-            </div>
-
-            
-            <h2>Status Actions</h2>
-            <div class="button-grid">
-                <button data-status-param="field=dateCreated&value=lastday"><span>📅</span><br>Assets Added Yesterday</button>
-                <button data-status-param="field=dateCreated&value=lastweek"><span>📆</span><br>Assets Added Last Week</button>
-                <button data-status-param="field=watermark&value=1"><span>💧</span><br>Watermarked Assets</button>
-                <button data-status-param="field=archive&value=1"><span>📂</span><br>Archived Assets</button>
-                <button data-status-param="field=isActive&value=true"><span>✅</span><br>Active Assets</button>
-                <button data-status-param="field=isPublic&value=1"><span>🌍</span><br>Public Assets</button>
-                <button data-status-param="field=keyVisual&value=1"><span>🔒</span><br>Limited Usage Assets</button>
-                <button data-status-param="field=audit&value=1"><span>⏳</span><br>Sent for Review Assets</button>
-            </div>
-
-            <div class="output-container">
-                <p id="output2"></p>
-                <i class="fas fa-copy" title="Copy to clipboard" style="cursor: pointer; margin-left: 10px;"></i>
-            </div>
         </div>
     </div>
     <script>
