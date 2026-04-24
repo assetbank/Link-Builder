@@ -114,6 +114,7 @@ h3 {
     gap: 70px;
     padding-top: 15px;
     padding-bottom: 15px;
+    position: relative;
 }
 
 
@@ -422,11 +423,30 @@ input:focus {
 }
 
 .button-grid button:hover {
-    background-color: #f4f9ff;
+    background-color: #f4f9ff; 
 }
 
 .button-grid button.selected {
     background-color: #ECF3FF;
+}
+
+.delete-row-btn {
+    background: none;
+    border: none;
+    color: #9CA3AF;
+    font-size: 18px;
+    line-height: 1;
+    padding: 0 4px;
+    cursor: pointer;
+    transition: color 0.15s ease;
+    position: absolute;
+    left: calc(50% + 230px);
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.delete-row-btn:hover {
+    color: #ef4444;
 }
 
 .tab-new-badge {

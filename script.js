@@ -352,11 +352,13 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     function populateFromAsset(asset) {
+        // Clear existing metaproperty and tag fields
         const metaContainer = document.getElementById("metaproperty-rows");
         const tagContainer = document.getElementById("tag-rows");
         metaContainer.innerHTML = "";
         tagContainer.innerHTML = "";
 
+        // Populate metaproperties
         const metaproperties = (asset.metaproperties && asset.metaproperties.nodes) || [];
         const metaEntries = [];
         metaproperties.forEach(function (mp) {
@@ -379,6 +381,7 @@ document.addEventListener("DOMContentLoaded", function () {
             metaContainer.appendChild(row);
         });
 
+        // Populate tags
         const tags = asset.tags || [];
         const tagPairs = [];
         for (let i = 0; i < tags.length; i += 2) {
@@ -397,6 +400,7 @@ document.addEventListener("DOMContentLoaded", function () {
             tagContainer.appendChild(row);
         });
 
+        // Show feedback and switch to panel 1
         updateDeleteButtons("metaproperty-rows", "metaproperty-row");
         updateDeleteButtons("tag-rows", "tag-row");
         ucvStatus.textContent = `Imported: ${asset.name || asset.databaseId}`;
