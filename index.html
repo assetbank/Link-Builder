@@ -2,14 +2,28 @@
 <html lang="en">
 <head>
     <script>
-        if (window.top !== window.self) {
+        try {
+            if (window.top !== window.self && window.top.location.hostname !== window.self.location.hostname) {
+                window.top.location = window.self.location;
+            }
+        } catch (e) {
+            // cross-origin top frame — can't read hostname, so redirect
             window.top.location = window.self.location;
         }
-    </script>    
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Link Builder</title>
-    <link rel="stylesheet" href="/style.css?v=2">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q0S8FCFFCK"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-Q0S8FCFFCK');
+    </script>
+    <link rel="stylesheet" href="/style.css?v=4">
+    <script src="https://ucv.bynder.com/5.0.5/modules/compactview/bynder-compactview-5-latest.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script>
         function setFavicon() {
@@ -41,6 +55,7 @@
             <div class="tab-bar">
                 <button class="tab-btn active" data-target="panel1">Metaproperties &amp; Tags</button>
                 <button class="tab-btn" data-target="panel2">Keywords</button>
+                <button class="tab-btn" data-target="panel3">Browse Assets <span class="tab-new-badge">New</span></button>
             </div>
 
             <div class="baseURL-container">
@@ -162,12 +177,24 @@
                 </div>
             </div>
 
+            <div class="tab-panel" id="panel3">
+                <hr class="section-divider">
+                <h2>Browse &amp; Select an Asset</h2>
+                <h3>Select any asset from your portal — its metaproperties and tags will be imported into the Metaproperties &amp; Tags tab automatically.</h3>
+                <div id="ucv-prompt">
+                    <p id="ucv-prompt-text">Enter your Portal URL above, then click <strong>Open Asset Browser</strong>.</p>
+                    <button id="ucv-open-btn" disabled>Open Asset Browser</button>
+                </div>
+                <div id="ucv-container"></div>
+                <div id="ucv-status"></div>
+            </div>
+
         </div>
     </div>
     <script>
         let lastScrollY = window.scrollY;
         const header = document.querySelector(".header");
-    
+
         window.addEventListener("scroll", () => {
             if (window.scrollY > lastScrollY) {
                 header.classList.add("hidden");
@@ -176,9 +203,7 @@
             }
         });
     </script>
-    
-<script 
-src="script.js">
-</script>
+
+<script src="script.js"></script>
 </body>
 </html>

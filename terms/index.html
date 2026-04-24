@@ -2,13 +2,25 @@
 <html lang="en">
 <head>
     <script>
-        if (window.top !== window.self) {
+        try {
+            if (window.top !== window.self && window.top.location.hostname !== window.self.location.hostname) {
+                window.top.location = window.self.location;
+            }
+        } catch (e) {
             window.top.location = window.self.location;
         }
-    </script>    
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terms of Use & Privacy Policy</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q0S8FCFFCK"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-Q0S8FCFFCK');
+    </script>
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
@@ -26,23 +38,23 @@
         }
         .persistent-container {
             background-color: #F7F8F9;
-            width: 95%; 
-            max-width: 970px; 
+            width: 95%;
+            max-width: 970px;
             padding: 25px;
             position: relative;
             margin-bottom: 50px;
         }
         @media screen and (max-width: 768px) {
             .persistent-container {
-                width: 90%; 
-                padding: 20px; 
+                width: 90%;
+                padding: 20px;
             }
         }
 
         @media screen and (max-width: 480px) {
             .persistent-container {
-                width: 95%; 
-                padding: 15px; 
+                width: 95%;
+                padding: 15px;
             }
         }
 
@@ -70,30 +82,39 @@
     <a href="/terms/" id="nav-terms">Terms & Privacy</a>
 </nav>
 
-  
-</header>
-    
 
-<body>    
+</header>
+
+
+<body>
 <div class="persistent-container">
     <main class="content">
         <h1>Terms of Use & Privacy Policy</h1>
 
-        <h2>1. General Terms</h2>
-        <p>By accessing and using this website, you agree to comply with and be bound by these Terms of Use. If you do not agree with any part of these terms, please do not use the website.</p>
+        <h2>1. Acceptance of Terms</h2>
+        <p>By accessing or using this website, you agree to be bound by these Terms of Use and Privacy Policy. If you do not agree with any provision set forth herein, you must discontinue use of this website immediately.</p>
 
-        <h2>2. Purpose & Data Usage</h2>
-        <p>This website provides a tool for generating links in real-time. All operations occur locally in your browser, and no data entered is stored on a server or backend system. Once you refresh or leave the page, all entered data is permanently lost.</p>
+        <h2>2. Description of Service</h2>
+        <p>The Link Builder is a browser-based utility that enables users to generate deep-link URLs for Bynder Digital Asset Management portals. The tool supports URL construction based on metaproperties, option values, tags, keywords, and asset status filters. An integrated asset browser is available to authenticated Bynder users, enabling direct retrieval of asset metadata to assist with link construction.</p>
+        <p>All URL generation is performed entirely client-side. No data entered by the user is transmitted to, processed by, or stored on any server operated by or on behalf of this service.</p>
 
-        <h2>3. Privacy & Tracking</h2>
+        <h2>3. Data Processing & Privacy</h2>
+        <p>This website is designed with a minimal data footprint. The following applies to all users:</p>
         <ul>
-            <li>This website uses Google Analytics to understand how the tool is used (e.g. number of visitors). No personally identifiable information is collected.</li>
-            <li>No data entered into the tool is stored, retained, or shared.</li>
-            <li>No third-party services are used for advertising or data selling.</li>
+            <li><strong>User-entered data</strong> — All input (portal URLs, metaproperty names, option values, tags, and keywords) is processed exclusively within the user's browser session. This data is never transmitted to any external server, stored, logged, or shared. It is permanently discarded upon navigating away from or refreshing the page.</li>
+            <li><strong>Analytics</strong> — This website uses Google Analytics 4 to collect aggregated, anonymised usage data, including page views and session counts. No personally identifiable information is collected. Analytics data is used solely to understand tool usage patterns and inform product improvements. Google's data processing is governed by the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy Policy</a>.</li>
+            <li><strong>Asset browser</strong> — When using the integrated asset browser, authentication and asset data are handled directly between the user's browser and their Bynder portal. No asset data, credentials, or session information is accessible to or stored by this service.</li>
+            <li><strong>Third-party services</strong> — This website does not engage any third-party services for advertising, user profiling, or data monetisation purposes.</li>
         </ul>
 
-        <h2>4. Modifications & Availability</h2>
-        <p>The website owner reserves the right to modify or discontinue the service at any time without prior notice. Continued use of the website signifies your acceptance of any modifications.</p>
+        <h2>4. Intellectual Property</h2>
+        <p>The Bynder name, logo, and related trademarks are the property of Bynder B.V. This tool is an independent utility and is not an official Bynder product unless explicitly stated otherwise.</p>
+
+        <h2>5. Disclaimer of Warranties</h2>
+        <p>This service is provided on an "as is" and "as available" basis without warranties of any kind, either express or implied. The service owner makes no representations regarding the accuracy, completeness, or suitability of the tool for any particular purpose. Use of this tool is at the user's own discretion and risk.</p>
+
+        <h2>6. Modifications & Availability</h2>
+        <p>The service owner reserves the right to modify, suspend, or discontinue this website or any part thereof at any time without prior notice. Continued use of the website following any such modification constitutes acceptance of the updated terms.</p>
     </main>
 </div>
 
@@ -116,7 +137,7 @@
         } else {
             header.classList.remove("hidden");
         }
-        lastScrollY = window.scrollY; 
+        lastScrollY = window.scrollY;
     });
 </script>
 
