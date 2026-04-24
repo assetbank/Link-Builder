@@ -67,14 +67,65 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
+    function updateDeleteButtons(containerId, rowClass) {
+        const rows = document.querySelectorAll(`#${containerId} .${rowClass}`);
+        rows.forEach(row => {
+            const btn = row.querySelector(".delete-row-btn");
+            if (btn) btn.style.visibility = rows.length > 1 ? "visible" : "hidden";
+        });
+    }
+
+    function renumberRows(containerId, rowClass, placeholderFn) {
+        const rows = document.querySelectorAll(`#${containerId} .${rowClass}`);
+        rows.forEach((row, i) => {
+            const inputs = row.querySelectorAll("input");
+            placeholderFn(inputs, i + 1);
+        });
+    }
+
+    updateDeleteButtons("metaproperty-rows", "metaproperty-row");
+    updateDeleteButtons("tag-rows", "tag-row");
+
+    document.getElementById("metaproperty-rows").addEventListener("click", function (e) {
+        if (e.target.classList.contains("delete-row-btn")) {
+            const rows = document.querySelectorAll("#metaproperty-rows .metaproperty-row");
+            if (rows.length > 1) {
+                e.target.closest(".metaproperty-row").remove();
+                generateLink();
+                updateDeleteButtons("metaproperty-rows", "metaproperty-row");
+                renumberRows("metaproperty-rows", "metaproperty-row", (inputs, n) => {
+                    if (!inputs[0].value) inputs[0].placeholder = `🔧 Metaproperty ${n}`;
+                    if (!inputs[1].value) inputs[1].placeholder = `📋 Option ${n}`;
+                });
+            }
+        }
+    });
+
     document.getElementById("add-metaproperty-btn").addEventListener("click", function () {
         const rows = document.querySelectorAll("#metaproperty-rows .metaproperty-row");
         const n = rows.length + 1;
         const row = document.createElement("div");
         row.className = "form-group metaproperty-row";
-        row.innerHTML = `<div><input type="text" placeholder="🔧 Metaproperty ${n}"></div><div><input type="text" placeholder="📋 Option ${n}"></div>`;
+        row.innerHTML = `<div><input type="text" placeholder="🔧 Metaproperty ${n}"></div><div><input type="text" placeholder="📋 Option ${n}"></div><button type="button" class="delete-row-btn" title="Remove row">×</button>`;
         row.querySelectorAll("input").forEach(input => input.addEventListener("input", generateLink));
         document.getElementById("metaproperty-rows").appendChild(row);
+        updateDeleteButtons("metaproperty-rows", "metaproperty-row");
+    });
+
+    document.getElementById("tag-rows").addEventListener("click", function (e) {
+        if (e.target.classList.contains("delete-row-btn")) {
+            const rows = document.querySelectorAll("#tag-rows .tag-row");
+            if (rows.length > 1) {
+                e.target.closest(".tag-row").remove();
+                generateLink();
+                updateDeleteButtons("tag-rows", "tag-row");
+                renumberRows("tag-rows", "tag-row", (inputs, n) => {
+                    const base = (n - 1) * 2 + 1;
+                    if (!inputs[0].value) inputs[0].placeholder = `🏷️ Tag ${base}`;
+                    if (!inputs[1].value) inputs[1].placeholder = `🏷️ Tag ${base + 1}`;
+                });
+            }
+        }
     });
 
     document.getElementById("add-tag-btn").addEventListener("click", function () {
@@ -82,9 +133,10 @@ document.addEventListener("DOMContentLoaded", function () {
         const n = rows.length * 2 + 1;
         const row = document.createElement("div");
         row.className = "form-group tag-row";
-        row.innerHTML = `<div><input type="text" placeholder="🏷️ Tag ${n}"></div><div><input type="text" placeholder="🏷️ Tag ${n + 1}"></div>`;
+        row.innerHTML = `<div><input type="text" placeholder="🏷️ Tag ${n}"></div><div><input type="text" placeholder="🏷️ Tag ${n + 1}"></div><button type="button" class="delete-row-btn" title="Remove row">×</button>`;
         row.querySelectorAll("input").forEach(input => input.addEventListener("input", generateLink));
         document.getElementById("tag-rows").appendChild(row);
+        updateDeleteButtons("tag-rows", "tag-row");
     });
 
     document.getElementById("add-keyword-btn").addEventListener("click", function () {
@@ -322,7 +374,7 @@ document.addEventListener("DOMContentLoaded", function () {
         metaEntries.forEach(function (entry, i) {
             const row = document.createElement("div");
             row.className = "form-group metaproperty-row";
-            row.innerHTML = `<div><input type="text" placeholder="🔧 Metaproperty ${i + 1}" value="${escapeAttr(entry.field)}"></div><div><input type="text" placeholder="📋 Option ${i + 1}" value="${escapeAttr(entry.value)}"></div>`;
+            row.innerHTML = `<div><input type="text" placeholder="🔧 Metaproperty ${i + 1}" value="${escapeAttr(entry.field)}"></div><div><input type="text" placeholder="📋 Option ${i + 1}" value="${escapeAttr(entry.value)}"></div><button type="button" class="delete-row-btn" title="Remove row">×</button>`;
             row.querySelectorAll("input").forEach(input => input.addEventListener("input", generateLink));
             metaContainer.appendChild(row);
         });
@@ -340,11 +392,13 @@ document.addEventListener("DOMContentLoaded", function () {
             const n = i * 2 + 1;
             const row = document.createElement("div");
             row.className = "form-group tag-row";
-            row.innerHTML = `<div><input type="text" placeholder="🏷️ Tag ${n}" value="${escapeAttr(pair.t1)}"></div><div><input type="text" placeholder="🏷️ Tag ${n + 1}" value="${escapeAttr(pair.t2)}"></div>`;
+            row.innerHTML = `<div><input type="text" placeholder="🏷️ Tag ${n}" value="${escapeAttr(pair.t1)}"></div><div><input type="text" placeholder="🏷️ Tag ${n + 1}" value="${escapeAttr(pair.t2)}"></div><button type="button" class="delete-row-btn" title="Remove row">×</button>`;
             row.querySelectorAll("input").forEach(input => input.addEventListener("input", generateLink));
             tagContainer.appendChild(row);
         });
 
+        updateDeleteButtons("metaproperty-rows", "metaproperty-row");
+        updateDeleteButtons("tag-rows", "tag-row");
         ucvStatus.textContent = `Imported: ${asset.name || asset.databaseId}`;
         switchToTab(0);
     }
