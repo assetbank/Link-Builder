@@ -333,8 +333,6 @@ document.addEventListener("DOMContentLoaded", function () {
             onSuccess: function (assets) {
                 if (!assets || assets.length === 0) return;
                 const asset = assets[0];
-                console.log("[UCV] onSuccess asset:", JSON.stringify(asset, null, 2));
-
                 // Close and reset the UCV so the "Add asset" button doesn't stay in loading state
                 ucvContainer.innerHTML = "";
                 ucvContainer.classList.remove("active");
