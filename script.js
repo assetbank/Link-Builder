@@ -330,22 +330,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 editable: false
             },
             mode: "SingleSelect",
-            assetFieldSelection: `
-                databaseId
-                name
-                tags
-                metaproperties {
-                    nodes {
-                        name
-                        options {
-                            name
-                        }
-                    }
-                }
-            `,
             onSuccess: function (assets) {
                 if (!assets || assets.length === 0) return;
                 const asset = assets[0];
+                console.log("[UCV] onSuccess asset:", JSON.stringify(asset, null, 2));
 
                 // Close and reset the UCV so the "Add asset" button doesn't stay in loading state
                 ucvContainer.innerHTML = "";
@@ -366,12 +354,22 @@ document.addEventListener("DOMContentLoaded", function () {
         tagContainer.innerHTML = "";
 
         // Populate metaproperties
-        const metaproperties = (asset.metaproperties && asset.metaproperties.nodes) || [];
+        // Default UCV response: flat object keyed by metaproperty ID with { name, options:[{name}] }
+        // GraphQL assetFieldSelection response: { nodes: [{name, options:[{name}]}] }
+        let metaSource = [];
+        if (asset.metaproperties) {
+            if (Array.isArray(asset.metaproperties.nodes)) {
+                metaSource = asset.metaproperties.nodes;
+            } else if (typeof asset.metaproperties === "object") {
+                metaSource = Object.values(asset.metaproperties);
+            }
+        }
         const metaEntries = [];
-        metaproperties.forEach(function (mp) {
+        metaSource.forEach(function (mp) {
             if (mp.options && mp.options.length > 0) {
                 mp.options.forEach(function (opt) {
-                    metaEntries.push({ field: mp.name, value: opt.name });
+                    const optName = typeof opt === "string" ? opt : opt.name;
+                    metaEntries.push({ field: mp.name, value: optName });
                 });
             }
         });
@@ -388,8 +386,9 @@ document.addEventListener("DOMContentLoaded", function () {
             metaContainer.appendChild(row);
         });
 
-        // Populate tags
-        const tags = asset.tags || [];
+        // Populate tags — may be an array of strings or an object keyed by tag
+        const rawTags = asset.tags || [];
+        const tags = Array.isArray(rawTags) ? rawTags : Object.keys(rawTags);
         const tagPairs = [];
         for (let i = 0; i < tags.length; i += 2) {
             tagPairs.push({ t1: tags[i] || "", t2: tags[i + 1] || "" });
