@@ -346,6 +346,13 @@ document.addEventListener("DOMContentLoaded", function () {
             onSuccess: function (assets) {
                 if (!assets || assets.length === 0) return;
                 const asset = assets[0];
+
+                // Close and reset the UCV so the "Add asset" button doesn't stay in loading state
+                ucvContainer.innerHTML = "";
+                ucvContainer.classList.remove("active");
+                ucvOpen = false;
+                ucvOpenBtn.textContent = "Open Asset Browser";
+
                 populateFromAsset(asset);
             }
         });
