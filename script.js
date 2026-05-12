@@ -1,5 +1,5 @@
 function sanitizeDatabaseName(input) {
-    return input.replace(/[^a-zA-Z0-9-]/g, "_");
+    return input.replace(/[^a-zA-Z0-9.-]/g, "_");
 }
 
 function sanitizeBaseURL(input) {
