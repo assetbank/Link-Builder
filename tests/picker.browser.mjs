@@ -33,8 +33,8 @@ before(async () => {
 });
 after(async () => { await browser?.close(); await new Promise(r => server?.close(r)); });
 
-async function setup({ realSDK = false, badIntegrity = false, holdLogin = false } = {}) {
-    const context = await browser.newContext();
+async function setup({ realSDK = false, badIntegrity = false, holdLogin = false, colorScheme = 'light' } = {}) {
+    const context = await browser.newContext({ colorScheme });
     const requests = [], errors = [];
     let authParams, exchange;
     context.on('request', request => requests.push(request.url()));
@@ -208,5 +208,18 @@ test('actual pinned SDK initializes with supplied token without persisting crede
         assert(!storage.includes('secret') && !storage.includes('never-store'));
         assert(!env.requests.some(url => /google-analytics|googletagmanager|sentry/.test(url)));
         assert(!env.errors.some(error => /Content Security|Refused to evaluate|not a function/.test(error)));
+    } finally { await env.context.close(); }
+});
+
+test('theme changes reach the connection screen without closing the picker', async () => {
+    const env = await setup({ colorScheme: 'dark' });
+    try {
+        assert.equal(await env.frame.locator('html').getAttribute('data-theme'), 'dark');
+        assert.equal(await env.frame.locator('body').evaluate(el => getComputedStyle(el).backgroundColor), 'rgb(18, 30, 50)');
+        await env.page.getByRole('button', { name: 'Dark mode', exact: true }).click();
+        await env.frame.waitForFunction(() => document.documentElement.dataset.theme === 'light');
+        assert.equal(await env.page.locator('#ucv-container iframe').count(), 1);
+        assert(await env.frame.locator('#connect').isVisible());
+        assert.deepEqual(env.errors, []);
     } finally { await env.context.close(); }
 });

@@ -9,8 +9,11 @@ const origin = 'http://127.0.0.1:4179';
 before(async () => { browser = await chromium.launch({ headless: true }); });
 after(async () => { await browser?.close(); });
 
-async function setup(width = 1440) {
-    const context = await browser.newContext({ viewport: { width, height: 1000 } });
+async function setup(width = 1440, { colorScheme = 'light', storageBlocked = false } = {}) {
+    const context = await browser.newContext({ viewport: { width, height: 1000 }, colorScheme });
+    if (storageBlocked) await context.addInitScript(() => {
+        Object.defineProperty(window, 'localStorage', { get() { throw new DOMException('Storage blocked', 'SecurityError'); } });
+    });
     await context.route(`${origin}/**`, async route => {
         let pathname = new URL(route.request().url()).pathname;
         if (pathname.endsWith('/')) pathname += 'index.html';
@@ -320,6 +323,75 @@ test('page navigation transitions keep the shared header stable and respect redu
             await page.locator('#baseURL').fill('portal.example');
             await page.locator('#keyword1').fill('header');
             assert.match(await page.locator('#output a').getAttribute('href'), /field=singletext&value=header/);
+            assert.deepEqual(errors, []);
+        } finally { await context.close(); }
+    }
+});
+
+test('theme follows the system until chosen, persists across pages, and syncs between tabs', async () => {
+    const { context, page, errors } = await setup(1440, { colorScheme: 'dark' });
+    try {
+        const theme = () => page.locator('html').getAttribute('data-theme');
+        assert.equal(await theme(), 'dark');
+        await page.emulateMedia({ colorScheme: 'light' });
+        await page.waitForFunction(() => document.documentElement.dataset.theme === 'light');
+        const toggle = page.getByRole('button', { name: 'Dark mode', exact: true });
+        await toggle.focus();
+        await page.keyboard.press('Space');
+        assert.equal(await theme(), 'dark');
+        assert.equal(await toggle.getAttribute('aria-pressed'), 'true');
+        await page.emulateMedia({ colorScheme: 'dark' });
+        await page.emulateMedia({ colorScheme: 'light' });
+        assert.equal(await theme(), 'dark');
+        await page.locator('#nav-terms').click();
+        await page.waitForURL(`${origin}/terms/`);
+        assert.equal(await theme(), 'dark');
+        assert.equal(await page.locator('.content h1').evaluate(el => getComputedStyle(el).color), 'rgb(236, 243, 255)');
+        await page.reload();
+        assert.equal(await theme(), 'dark');
+        const other = await context.newPage();
+        await other.goto(origin);
+        await other.getByRole('button', { name: 'Dark mode', exact: true }).click();
+        await page.waitForFunction(() => document.documentElement.dataset.theme === 'light');
+        await page.locator('#nav-home').click();
+        await page.waitForURL(`${origin}/`);
+        assert.equal(await theme(), 'light');
+        assert.equal(await page.locator('#baseURL').evaluate(el => getComputedStyle(el).backgroundColor), 'rgb(251, 252, 254)');
+        assert.deepEqual(errors, []);
+    } finally { await context.close(); }
+});
+
+test('theme switching and link building work when browser storage is blocked', async () => {
+    const { context, page, errors } = await setup(390, { colorScheme: 'dark', storageBlocked: true });
+    try {
+        assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark');
+        await page.getByRole('button', { name: 'Dark mode', exact: true }).click();
+        assert.equal(await page.locator('html').getAttribute('data-theme'), 'light');
+        await page.locator('#baseURL').fill('portal.example');
+        await page.locator('#keyword1').fill('header');
+        assert.match(await page.locator('#output a').getAttribute('href'), /field=singletext&value=header/);
+        assert.deepEqual(errors, []);
+    } finally { await context.close(); }
+});
+
+test('dark controls remain readable and within the viewport on desktop and mobile', async () => {
+    for (const width of [320, 1440]) {
+        const { context, page, errors } = await setup(width, { colorScheme: 'dark' });
+        try {
+            for (const selector of ['.brand-link', '.nav', '.theme-toggle', '.generated-link-container']) {
+                const box = await page.locator(selector).boundingBox();
+                assert(box.x >= 0 && box.x + box.width <= width, `${selector} fits at ${width}px`);
+            }
+            await page.locator('#baseURL').fill('portal.example');
+            await page.locator('#keyword1').fill('summer');
+            await page.getByRole('button', { name: 'Public', exact: true }).click();
+            const publicFilter = page.getByRole('button', { name: 'Public', exact: true });
+            assert.equal(await publicFilter.getAttribute('aria-pressed'), 'true');
+            await page.waitForFunction(() => getComputedStyle(document.querySelector('.button-grid button.selected')).backgroundColor === 'rgb(35, 56, 92)');
+            await page.locator('.copy-link-btn').click();
+            assert.match((await page.evaluate(() => window.copiedLinks)).at(-1), /field=isPublic&value=true/);
+            await page.locator('#tab3').click();
+            assert.equal(await page.locator('#ucv-prompt-text').evaluate(el => getComputedStyle(el).color), 'rgb(167, 183, 206)');
             assert.deepEqual(errors, []);
         } finally { await context.close(); }
     }

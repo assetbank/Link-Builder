@@ -12,8 +12,8 @@
         @view-transition { navigation: auto; }
         @media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }
     </style>
-    <link rel="stylesheet" href="/style.css?v=11" blocking="render">
-    <script src="/site.js?v=3" defer></script>
+    <script src="/site.js?v=4"></script>
+    <link rel="stylesheet" href="/style.css?v=12" blocking="render">
     <link rel="expect" href="#main-content" blocking="render">
     <style>
         .content {
@@ -81,6 +81,10 @@
             <a href="/" id="nav-home">Link Builder</a>
             <a href="/terms/" id="nav-terms" class="active" aria-current="page">Terms &amp; Privacy</a>
         </nav>
+        <button class="theme-toggle" type="button" aria-label="Dark mode" aria-pressed="false" title="Switch to dark mode">
+            <svg class="theme-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 13.5A8.5 8.5 0 0 1 10.5 3.5a8.5 8.5 0 1 0 10 10Z"/></svg>
+            <svg class="theme-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg>
+        </button>
     </div>
 </header>
 
@@ -140,6 +144,7 @@
         <section id="privacy">
             <h2>4. Data handling &amp; privacy</h2>
             <h3>Information in your browser</h3>
+            <p>Your light or dark appearance preference is saved in this browser so it can be used across visits. If you have not chosen a theme, the site follows your system appearance. This preference contains no portal details or account information.</p>
             <p>Portal domains, entered search fields, and imported metadata are processed in the open page. Imported fields are not intentionally saved in persistent browser storage. The picker may temporarily remember the connected portal domain locally; that preference is cleared when the picker closes. Local credential entries left by earlier versions of this integration are removed when this site loads.</p>
             <p>Your browser may retain page state, cached resources, clipboard contents, or browsing history. Closing the picker does not erase those browser records or copies of links you have already shared. On a shared device, also consider your portal's sign-out options and the browser's privacy controls.</p>
 

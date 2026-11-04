@@ -4,3 +4,12 @@ button { border: 0; border-radius: 6px; padding: 12px 20px; background: #0545ac;
 button:disabled { opacity: .5; cursor: wait; }
 #picker { height: 650px; }
 [hidden] { display: none !important; }
+
+/* Theme the local connection screen; the embedded Bynder UI owns its styling. */
+:root { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
+[data-theme="dark"] body { background: #121e32; color: #ecf3ff; }
+[data-theme="dark"] #connect-panel button { background: #23385c; color: #b5ceff; border: 1px solid #526f9d; }
+[data-theme="dark"] #connect-panel button:hover:not(:disabled) { background: #2a436e; }
+#connect-panel button:focus-visible { outline: 2px solid #a1acff; outline-offset: 3px; }
+#picker { color-scheme: light; }
