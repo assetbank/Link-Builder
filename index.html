@@ -5,25 +5,33 @@
     <meta name="referrer" content="no-referrer">
     <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=1">
-    <script src="/site.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Link Builder</title>
-    <link rel="stylesheet" href="/style.css?v=6">
-    <link rel="stylesheet" href="/builder.css?v=9">
+    <!-- Declare eligibility before external styles load to avoid cancelling return transitions. -->
+    <style>
+        @view-transition { navigation: auto; }
+        @media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }
+    </style>
+    <link rel="stylesheet" href="/style.css?v=9" blocking="render">
+    <script src="/site.js?v=3" defer></script>
+    <link rel="stylesheet" href="/builder.css?v=9" blocking="render">
+    <link rel="expect" href="#main-content" blocking="render">
 
 
 </head>
 <body>
 <header class="header">
-<img src="bynder-logo-white.png" alt="Logo" class="logo" style="cursor: pointer;">
-<nav class="nav">
-    <a href="/" id="nav-home">Link Builder</a>
-    <a href="/terms/" id="nav-terms">Terms & Privacy</a>
-</nav>
-
-
+    <div class="header-inner">
+        <a class="brand-link" href="https://support.bynder.com" target="_blank" rel="noopener noreferrer" aria-label="Bynder Support (opens in a new tab)">
+            <img src="/bynder-logo-white.png" alt="Bynder" class="logo" width="1895" height="600">
+        </a>
+        <nav class="nav" aria-label="Main navigation">
+            <a href="/" id="nav-home" class="active" aria-current="page">Link Builder</a>
+            <a href="/terms/" id="nav-terms">Terms &amp; Privacy</a>
+        </nav>
+    </div>
 </header>
-<main class="builder container-wrapper">
+<main id="main-content" class="builder container-wrapper">
     <h1 class="sr-only">Link Builder</h1>
     <div class="container">
         <div class="tab-bar" role="tablist" aria-label="Link building options">
@@ -43,7 +51,7 @@
             <section class="builder-section" aria-labelledby="metaproperty-heading">
                 <h2 id="metaproperty-heading"><svg class="section-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#sliders"></use></svg>Metaproperties &amp; options</h2>
                 <p class="section-help" id="metaproperty-help">Match capitalization and use the <a href="https://support.bynder.com/hc/en-us/articles/6190351879186-Create-Metaproperties#h_01KNM026Q3NVKNYR38QH1W90JJ" target="_blank" rel="noopener noreferrer">database names</a> for renamed fields or options.</p>
-                <div id="metaproperty-rows"><div class="form-group metaproperty-row"><label class="field" for="field1"><span class="field-label">Metaproperty 1</span><span class="input-wrap"><svg class="field-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#sliders"></use></svg><input type="text" id="field1" placeholder="Metaproperty 1" autocomplete="off" spellcheck="false" aria-describedby="metaproperty-help"></span></label><label class="field" for="value1"><span class="field-label">Option 1</span><span class="input-wrap"><svg class="field-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#option"></use></svg><input type="text" id="value1" placeholder="Option 1" autocomplete="off" spellcheck="false" aria-describedby="metaproperty-help"></span></label><button type="button" class="delete-row-btn" aria-label="Remove metaproperty 1" title="Remove metaproperty 1">×</button></div>
+                <div id="metaproperty-rows"><div class="form-group metaproperty-row"><label class="field" for="field1"><span class="field-label">Metaproperty 1</span><span class="input-wrap"><svg class="field-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#sliders"></use></svg><input type="text" id="field1" placeholder="Metaproperty 1" autocomplete="off" spellcheck="false" aria-describedby="metaproperty-help"></span></label><label class="field" for="value1"><span class="field-label">Option 1</span><span class="input-wrap"><svg class="field-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#option"></use></svg><input type="text" id="value1" placeholder="Option 1" autocomplete="off" spellcheck="false" aria-describedby="metaproperty-help"></span></label><button type="button" class="delete-row-btn" disabled style="visibility: hidden" aria-label="Remove metaproperty 1" title="Remove metaproperty 1">×</button></div>
 
 
 </div>
@@ -52,7 +60,7 @@
             <section class="builder-section" aria-labelledby="tag-heading">
                 <h2 id="tag-heading"><svg class="section-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#tag"></use></svg>Tags</h2>
                 <p class="section-help" id="tag-help">Use tags exactly as they appear in your portal, including capitalization.</p>
-                <div id="tag-rows"><div class="form-group tag-row"><label class="field" for="tag1"><span class="field-label">Tag 1</span><span class="input-wrap"><svg class="field-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#tag"></use></svg><input type="text" id="tag1" placeholder="Tag 1" autocomplete="off" spellcheck="false" aria-describedby="tag-help"></span></label><label class="field" for="tag2"><span class="field-label">Tag 2</span><span class="input-wrap"><svg class="field-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#tag"></use></svg><input type="text" id="tag2" placeholder="Tag 2" autocomplete="off" spellcheck="false" aria-describedby="tag-help"></span></label><button type="button" class="delete-row-btn" aria-label="Remove tags 1 and 2" title="Remove tags 1 and 2">×</button></div>
+                <div id="tag-rows"><div class="form-group tag-row"><label class="field" for="tag1"><span class="field-label">Tag 1</span><span class="input-wrap"><svg class="field-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#tag"></use></svg><input type="text" id="tag1" placeholder="Tag 1" autocomplete="off" spellcheck="false" aria-describedby="tag-help"></span></label><label class="field" for="tag2"><span class="field-label">Tag 2</span><span class="input-wrap"><svg class="field-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#tag"></use></svg><input type="text" id="tag2" placeholder="Tag 2" autocomplete="off" spellcheck="false" aria-describedby="tag-help"></span></label><button type="button" class="delete-row-btn" disabled style="visibility: hidden" aria-label="Remove tags 1 and 2" title="Remove tags 1 and 2">×</button></div>
 </div>
                 <button type="button" id="add-tag-btn" class="add-row-btn"><span aria-hidden="true">+</span> Add tags</button>
             </section>

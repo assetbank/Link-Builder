@@ -262,3 +262,65 @@ test('compact defaults keep copy and the full link accessible while scrolling', 
         } finally { await context.close(); }
     }
 });
+
+test('shared header keeps navigation, logo activation and scroll behavior accessible', async () => {
+    const { context, page, errors } = await setup(390);
+    try {
+        assert.equal(await page.locator('#nav-home').getAttribute('aria-current'), 'page');
+        await page.locator('#nav-terms').click();
+        await page.waitForURL(`${origin}/terms/`);
+        assert.equal(await page.locator('#nav-terms').getAttribute('aria-current'), 'page');
+        assert.equal(await page.locator('#nav-home').getAttribute('aria-current'), null);
+        const brand = page.getByRole('link', { name: 'Bynder Support (opens in a new tab)' });
+        await brand.focus();
+        const pending = context.waitForEvent('page');
+        await page.keyboard.press('Enter');
+        const popup = await pending;
+        await popup.waitForURL('https://support.bynder.com/');
+        assert.equal(context.pages().length, 2);
+        await popup.close();
+        await page.evaluate(() => {
+            document.activeElement.blur();
+            scrollTo({ top: 600, behavior: 'instant' });
+        });
+        await page.waitForFunction(() => document.querySelector('.header').getBoundingClientRect().bottom <= 0);
+        await page.evaluate(() => scrollTo({ top: 300, behavior: 'instant' }));
+        await page.waitForFunction(() => document.querySelector('.header').getBoundingClientRect().top >= 0);
+        await page.evaluate(() => scrollTo({ top: 600, behavior: 'instant' }));
+        await page.waitForFunction(() => document.querySelector('.header').getBoundingClientRect().bottom <= 0);
+        await brand.focus();
+        await page.waitForFunction(() => document.querySelector('.header').getBoundingClientRect().top >= 0);
+        await page.locator('#nav-home').click();
+        await page.waitForURL(`${origin}/`);
+        assert.equal(await page.locator('#nav-home').getAttribute('aria-current'), 'page');
+        assert.deepEqual(errors, []);
+    } finally { await context.close(); }
+});
+
+test('page navigation transitions keep the shared header stable and respect reduced motion', async () => {
+    for (const reducedMotion of ['no-preference', 'reduce']) {
+        const { context, page, errors } = await setup();
+        try {
+            await page.emulateMedia({ reducedMotion });
+            await context.addInitScript(() => {
+                addEventListener('pagereveal', event => {
+                    window.pageTransition = { started: !!event.viewTransition, finished: !event.viewTransition };
+                    event.viewTransition?.finished.then(() => { window.pageTransition.finished = true; });
+                });
+            });
+            const header = await page.locator('.header').boundingBox();
+            for (const [link, pathname] of [['#nav-terms', '/terms/'], ['#nav-home', '/']]) {
+                await page.locator(link).click();
+                await page.waitForURL(`${origin}${pathname}`);
+                await page.waitForFunction(() => window.pageTransition?.finished);
+                assert.equal(await page.evaluate(() => window.pageTransition.started), reducedMotion === 'no-preference');
+                assert.equal(await page.locator(link).getAttribute('aria-current'), 'page');
+                assert.deepEqual(await page.locator('.header').boundingBox(), header);
+            }
+            await page.locator('#baseURL').fill('portal.example');
+            await page.locator('#keyword1').fill('header');
+            assert.match(await page.locator('#output a').getAttribute('href'), /field=singletext&value=header/);
+            assert.deepEqual(errors, []);
+        } finally { await context.close(); }
+    }
+});

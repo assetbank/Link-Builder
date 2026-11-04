@@ -5,10 +5,16 @@
     <meta name="referrer" content="no-referrer">
     <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=1">
-    <script src="/site.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terms of Use & Privacy Policy</title>
-    <link rel="stylesheet" href="/style.css">
+    <!-- Declare eligibility before external styles load to avoid cancelling return transitions. -->
+    <style>
+        @view-transition { navigation: auto; }
+        @media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }
+    </style>
+    <link rel="stylesheet" href="/style.css?v=9" blocking="render">
+    <script src="/site.js?v=3" defer></script>
+    <link rel="expect" href="#main-content" blocking="render">
     <style>
         .content {
             font-family: 'Inter', system-ui, sans-serif;
@@ -67,18 +73,20 @@
 </head>
 <body>
 <header class="header">
-<img src="/bynder-logo-white.png" alt="Bynder" class="logo" style="cursor: pointer;">
-<nav class="nav">
-    <a href="/" id="nav-home">Link Builder</a>
-    <a href="/terms/" id="nav-terms">Terms & Privacy</a>
-</nav>
-
-
+    <div class="header-inner">
+        <a class="brand-link" href="https://support.bynder.com" target="_blank" rel="noopener noreferrer" aria-label="Bynder Support (opens in a new tab)">
+            <img src="/bynder-logo-white.png" alt="Bynder" class="logo" width="1895" height="600">
+        </a>
+        <nav class="nav" aria-label="Main navigation">
+            <a href="/" id="nav-home">Link Builder</a>
+            <a href="/terms/" id="nav-terms" class="active" aria-current="page">Terms &amp; Privacy</a>
+        </nav>
+    </div>
 </header>
 
 
 <div class="persistent-container">
-    <main class="content">
+    <main id="main-content" class="content">
         <h1>Terms of Use &amp; Privacy Policy</h1>
         <p class="updated">Last updated: <time datetime="2026-11-04">4 November 2026</time></p>
         <p>This page explains how Link Builder works, what information it handles, and your responsibilities when using it.</p>

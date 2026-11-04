@@ -9,13 +9,10 @@ try {
 } catch { /* Storage may be disabled by the browser. */ }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const logo = document.querySelector('.logo');
-    logo?.addEventListener('click', () => window.open('https://support.bynder.com', '_blank', 'noopener,noreferrer'));
     const header = document.querySelector('.header');
     let lastScrollY = window.scrollY;
     window.addEventListener('scroll', () => {
         header?.classList.toggle('hidden', window.scrollY > lastScrollY);
         lastScrollY = window.scrollY;
     }, { passive: true });
-    document.getElementById(location.pathname.startsWith('/terms') ? 'nav-terms' : 'nav-home')?.classList.add('active');
 });
