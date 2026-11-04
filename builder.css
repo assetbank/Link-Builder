@@ -7,6 +7,7 @@ html:has(.builder .is-expanded) { scroll-padding-bottom: 340px; }
     --line: #e7ecf3;
     --blue: #126dfe;
     --link: #0759cf;
+    --input-focus: #5b91df;
     box-sizing: border-box;
     width: min(1052px, 100%);
     margin: 20px auto 180px;
@@ -45,7 +46,7 @@ html:has(.builder .is-expanded) { scroll-padding-bottom: 340px; }
 .builder a { color: var(--link); text-underline-offset: 3px; }
 .builder button, .builder input { font-family: inherit; }
 .builder button { touch-action: manipulation; }
-.builder :is(button, a, input, [tabindex]):focus-visible {
+.builder :is(button, a, [tabindex]):not(input):focus-visible {
     outline: 2px solid #3576d3;
     outline-offset: 3px;
 }
@@ -125,9 +126,10 @@ html:has(.builder .is-expanded) { scroll-padding-bottom: 340px; }
 .builder input::placeholder { font-style: italic; color: #66758b; font-weight: 400; }
 .builder input:hover { border-color: #a9bfdf; background: #fff; box-shadow: 0 2px 4px rgba(18, 109, 254, .04); }
 .builder input:not(:placeholder-shown) { background: #fff; border-bottom-color: #96b9ed; }
-.builder input:focus { border-color: #72a7f7; background: #fff; box-shadow: 0 0 0 3px rgba(18, 109, 254, .08); }
-.builder input:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
-.builder input[aria-invalid="true"] { border-color: #b42318; }
+/* Thicken the existing border inward so focus stays clear without a second ring or layout shift. */
+.builder input:focus { border-color: var(--input-focus); background: #fff; box-shadow: inset 0 0 0 1px var(--input-focus); }
+.builder input:focus-visible { outline: none; }
+.builder input[aria-invalid="true"] { --input-focus: #b42318; border-color: #b42318; }
 .builder .field-error { color: #b42318; font-size: 13px; margin: 12px 0 0; text-align: center; }
 .builder #metaproperty-rows, .builder #tag-rows { display: grid; gap: 14px; }
 .builder .form-group {
@@ -314,18 +316,19 @@ html:has(.builder .is-expanded) { scroll-padding-bottom: 340px; }
     --line: var(--dark-line);
     --blue: #a1acff;
     --link: var(--dark-link);
+    --input-focus: #a1acff;
 }
 [data-theme="dark"] .builder .container { background: var(--dark-surface); border-color: var(--line); box-shadow: 0 18px 48px -32px #030125; }
 [data-theme="dark"] .builder .baseURL-container { background: var(--dark-inset); }
-[data-theme="dark"] .builder :is(button, a, input, [tabindex]):focus-visible { outline-color: #a1acff; }
+[data-theme="dark"] .builder :is(button, a, [tabindex]):not(input):focus-visible { outline-color: #a1acff; }
 [data-theme="dark"] .builder .field-icon { color: #8fa6c8; }
 [data-theme="dark"] .builder .metaproperty-row .field:first-child::after { border-color: #6d83a5; }
 [data-theme="dark"] .builder input { background: var(--dark-inset); border-color: #3b506e; border-bottom-color: #52698b; }
 [data-theme="dark"] .builder input::placeholder { color: var(--muted); }
 [data-theme="dark"] .builder input:hover { background: var(--dark-raised); border-color: #6b8bb8; box-shadow: none; }
 [data-theme="dark"] .builder input:not(:placeholder-shown) { background: var(--dark-raised); border-bottom-color: #759fdf; }
-[data-theme="dark"] .builder input:focus { background: var(--dark-raised); border-color: #a1acff; box-shadow: 0 0 0 3px rgba(161, 172, 255, .12); }
-[data-theme="dark"] .builder input[aria-invalid="true"] { border-color: #ffa5a0; }
+[data-theme="dark"] .builder input:focus { background: var(--dark-raised); border-color: var(--input-focus); box-shadow: inset 0 0 0 1px var(--input-focus); }
+[data-theme="dark"] .builder input[aria-invalid="true"] { --input-focus: #ffa5a0; border-color: #ffa5a0; }
 [data-theme="dark"] .builder .field-error,
 [data-theme="dark"] .builder .input-wrap:has(input[aria-invalid="true"]) .field-icon { color: #ffa5a0; }
 [data-theme="dark"] .builder .delete-row-btn { color: var(--muted); }
