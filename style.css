@@ -46,7 +46,7 @@
 
 .header .logo {
     display: block;
-    width: 88px;
+    width: 111px;
     max-width: 100%;
     height: auto;
     margin: 0;
@@ -96,7 +96,7 @@
 
 @media (max-width: 1024px) {
     .header-inner { flex-direction: column; gap: 2px; min-height: 0; padding: 8px 0 10px; }
-    .header .logo { width: 82px; }
+    .header .logo { width: 103px; }
     .header .nav { gap: 12px; }
     .header .nav a { font-size: 14px; }
 }
