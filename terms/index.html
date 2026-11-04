@@ -1,82 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script>
-        try {
-            if (window.top !== window.self && window.top.location.hostname !== window.self.location.hostname) {
-                window.top.location = window.self.location;
-            }
-        } catch (e) {
-            window.top.location = window.self.location;
-        }
-    </script>
     <meta charset="UTF-8">
+    <meta name="referrer" content="no-referrer">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+    <link rel="icon" type="image/svg+xml" href="/Logo.svg">
+    <script src="/site.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terms of Use & Privacy Policy</title>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q0S8FCFFCK"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-Q0S8FCFFCK');
-    </script>
     <link rel="stylesheet" href="/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-               body {
-            font-family: 'Inter', sans-serif;
-            background-color: #F7F8F9;
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
             text-align: left;
-            padding: 5px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            height: auto;
-            overflow-y: auto;
+            color: #243650;
+            line-height: 1.7;
         }
         .persistent-container {
-            background-color: #F7F8F9;
-            width: 95%;
-            max-width: 970px;
-            padding: 25px;
-            position: relative;
-            margin-bottom: 50px;
+            box-sizing: border-box;
+            width: 100%;
+            max-width: 900px;
+            padding: 20px 28px 64px;
         }
-        @media screen and (max-width: 768px) {
-            .persistent-container {
-                width: 90%;
-                padding: 20px;
-            }
+        .content h1 {
+            padding: 0;
+            margin: 0 0 8px;
+            font-size: clamp(28px, 5vw, 40px);
+            line-height: 1.2;
         }
-
-        @media screen and (max-width: 480px) {
-            .persistent-container {
-                width: 95%;
-                padding: 15px;
-            }
+        .content h2 {
+            padding: 0;
+            margin: 36px 0 12px;
+            font-size: 22px;
+            text-transform: none;
+            letter-spacing: normal;
+            line-height: 1.35;
         }
-
-        h1 {
-            text-align: left;
-            padding: 20px 0px;
-
-}
+        .content h3 {
+            padding: 0;
+            margin: 24px 0 8px;
+            font-size: 17px;
+            font-weight: 600;
+            color: #031026;
+        }
+        .content p { margin: 0 0 16px; }
+        .content li { margin-bottom: 12px; }
+        .content ul, .content ol { padding-left: 24px; }
+        .content a { color: #0545ac; text-underline-offset: 3px; }
+        .content a:focus-visible { outline: 2px solid #0545ac; outline-offset: 4px; }
+        .content section { scroll-margin-top: 120px; }
+        .updated { color: #64748b; font-size: 14px; }
+        .page-links { display: flex; flex-wrap: wrap; gap: 8px 24px; margin: 24px 0; }
+        .summary {
+            padding: 20px 24px;
+            margin: 24px 0;
+            background: #ecf3ff;
+            border-left: 4px solid #0545ac;
+            border-radius: 4px;
+        }
+        .summary p:last-child { margin-bottom: 0; }
+        .header { box-sizing: border-box; justify-content: space-between; gap: 20px; }
+        .header .logo { width: 90px; max-width: 25%; margin: 0; }
+        .header .nav { position: static; transform: none; gap: 12px; }
+        @media (max-width: 480px) {
+            .persistent-container { padding: 12px 16px 40px; }
+            .header { padding: 24px 16px; gap: 8px; }
+            .header .nav { gap: 4px; }
+            .header .nav a { font-size: 14px; padding: 8px; }
+            .summary { padding: 16px; }
+        }
     </style>
-    <script>
-        function setFavicon() {
-            let favicon = document.querySelector("link[rel='icon']") || document.createElement("link");
-            favicon.rel = "icon";
-            favicon.type = "image/svg+xml";
-            favicon.href = `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'><path fill='%23126CFF' d='M224 0C100.3 0 0 100.3 0 224S100.3 448 224 448 448 347.7 448 224 347.7 0 224 0zM224 128c53 0 96 43 96 96s-43 96-96 96-96-43-96-96 43-96 96-96z'/></svg>`;
-            document.head.appendChild(favicon);
-        }
-        document.addEventListener("DOMContentLoaded", setFavicon);
-    </script>
 </head>
+<body>
 <header class="header">
-<img src="/bynder-logo-white.png" alt="Logo" class="logo" style="cursor: pointer;" onclick="window.open('https://support.bynder.com', '_blank')">
+<img src="/bynder-logo-white.png" alt="Bynder" class="logo" style="cursor: pointer;">
 <nav class="nav">
     <a href="/" id="nav-home">Link Builder</a>
     <a href="/terms/" id="nav-terms">Terms & Privacy</a>
@@ -86,60 +83,99 @@
 </header>
 
 
-<body>
 <div class="persistent-container">
     <main class="content">
-        <h1>Terms of Use & Privacy Policy</h1>
+        <h1>Terms of Use &amp; Privacy Policy</h1>
+        <p class="updated">Last updated: <time datetime="2026-11-04">4 November 2026</time></p>
+        <p>This page explains how Link Builder works, what information it handles, and your responsibilities when using it.</p>
 
-        <h2>1. Acceptance of Terms</h2>
-        <p>By accessing or using this website, you agree to be bound by these Terms of Use and Privacy Policy. If you do not agree with any provision set forth herein, you must discontinue use of this website immediately.</p>
+        <aside class="summary" aria-label="Key information">
+            <p><strong>Link building runs in your browser.</strong> You can enter fields manually or use the optional asset picker to fill them from your Bynder portal.</p>
+            <p>The picker uses a temporary connection. Imported metadata remains in the form after that connection ends, and sharing a generated link also shares the metadata written into its URL.</p>
+        </aside>
 
-        <h2>2. Description of Service</h2>
-        <p>The Link Builder is a browser-based utility that enables users to generate deep-link URLs for Bynder Digital Asset Management portals. The tool supports URL construction based on metaproperties, option values, tags, keywords, and asset status filters. An integrated asset browser is available to authenticated Bynder users, enabling direct retrieval of asset metadata to assist with link construction.</p>
-        <p>All URL generation is performed entirely client-side. No data entered by the user is transmitted to, processed by, or stored on any server operated by or on behalf of this service.</p>
+        <nav class="page-links" aria-label="On this page">
+            <a href="#asset-picker">How the asset picker works</a>
+            <a href="#privacy">Data &amp; privacy</a>
+            <a href="#responsibilities">Using and sharing links</a>
+        </nav>
 
-        <h2>3. Data Processing & Privacy</h2>
-        <p>This website is designed with a minimal data footprint. The following applies to all users:</p>
-        <ul>
-            <li><strong>User-entered data</strong> — All input (portal URLs, metaproperty names, option values, tags, and keywords) is processed exclusively within the user's browser session. This data is never transmitted to any external server, stored, logged, or shared. It is permanently discarded upon navigating away from or refreshing the page.</li>
-            <li><strong>Analytics</strong> — This website uses Google Analytics 4 to collect aggregated, anonymised usage data, including page views and session counts. No personally identifiable information is collected. Analytics data is used solely to understand tool usage patterns and inform product improvements. Google's data processing is governed by the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy Policy</a>.</li>
-            <li><strong>Asset browser</strong> — When using the integrated asset browser, authentication and asset data are handled directly between the user's browser and their Bynder portal. No asset data, credentials, or session information is accessible to or stored by this service.</li>
-            <li><strong>Third-party services</strong> — This website does not engage any third-party services for advertising, user profiling, or data monetisation purposes.</li>
-        </ul>
+        <section id="terms">
+            <h2>1. About these terms</h2>
+            <p>By using Link Builder, you agree to these terms. If you do not agree, please do not use the service. These terms describe this utility; your Bynder portal, identity provider, and organisation may have separate terms and policies that also apply.</p>
+        </section>
 
-        <h2>4. Intellectual Property</h2>
-        <p>The Bynder name, logo, and related trademarks are the property of Bynder B.V. This tool is an independent utility and is not an official Bynder product unless explicitly stated otherwise.</p>
+        <section id="service">
+            <h2>2. What Link Builder does</h2>
+            <p>Link Builder creates search links for Bynder Digital Asset Management portals using metaproperties, option values, tags, keywords, and asset status filters. It constructs those links in your browser and has no application backend for saving your entered fields or imported metadata.</p>
+            <p>Using the asset picker is optional. You can build links manually without connecting a Bynder account. Creating a search link does not change assets, publish them, or change their access permissions. The destination portal controls what a recipient can access when they open a link.</p>
+        </section>
 
-        <h2>5. Disclaimer of Warranties</h2>
-        <p>This service is provided on an "as is" and "as available" basis without warranties of any kind, either express or implied. The service owner makes no representations regarding the accuracy, completeness, or suitability of the tool for any particular purpose. Use of this tool is at the user's own discretion and risk.</p>
+        <section id="asset-picker">
+            <h2>3. How the asset picker works</h2>
+            <p>The <strong>Browse Assets</strong> tab uses Bynder's Universal Compact View to help you select an asset and reuse its metadata. The following describes this site's integration.</p>
 
-        <h2>6. Modifications & Availability</h2>
-        <p>The service owner reserves the right to modify, suspend, or discontinue this website or any part thereof at any time without prior notice. Continued use of the website following any such modification constitutes acceptance of the updated terms.</p>
+            <h3>Connecting and selecting an asset</h3>
+            <ol>
+                <li><strong>Enter your portal domain.</strong> Open the asset browser and check the domain shown on the Connect button. Only connect to a portal you recognise and are authorised to use. Opening the picker alone does not sign you in.</li>
+                <li><strong>Sign in through your portal.</strong> Clicking Connect opens a separate sign-in window. Enter your credentials only on your trusted portal or its identity provider. An existing single sign-on session may let you continue without entering them again. Link Builder does not provide a password-entry form.</li>
+                <li><strong>Browse with a temporary authorisation.</strong> After sign-in, this integration receives an access token: a temporary credential it uses to request asset information on your behalf. It requests read access to assets, collections, and metadata. It does not request write permissions or offline access. This authorisation supports browsing and is broader than access to the one asset you eventually select; your portal's permissions still apply.</li>
+                <li><strong>Select one asset.</strong> Its metaproperty names, option names, and tags replace the existing entries in the Metaproperties &amp; Tags tab. Its name is used to identify the import. You can review and edit the fields before copying or opening the generated link. The import does not modify the source asset.</li>
+            </ol>
+            <p>The picker may fetch previews, file details, and other information needed to display assets. The link-builder form receives only the selected asset's name, metaproperty names and options, and tags. Selecting an asset does not upload its original file to a Link Builder server.</p>
+
+            <h3>Ending the connection</h3>
+            <p>The access token is held in browser memory for the active picker session. This integration does not save access or refresh tokens in persistent browser storage, request background access after the session, or automatically refresh the connection.</p>
+            <p>Selecting an asset, choosing <strong>Close &amp; Disconnect</strong>, changing the portal domain, leaving the page, or signing out through the picker ends the local connection. The picker also times out after 15 minutes, or earlier if its access token expires. Reopen it to connect again.</p>
+            <p><strong>Disconnecting does not clear metadata already imported into the form.</strong> It also does not sign you out of your Bynder portal or identity provider, or revoke an authorisation already issued by Bynder. Manage portal sessions and connected-app authorisations through your portal or its administrator.</p>
+
+            <h3>Availability and permitted use</h3>
+            <p>This connection flow supports Bynder portals, including compatible custom domains; it does not support WebDAM. Access depends on your account permissions, portal configuration, browser popup settings, and the availability of Bynder's services. If connecting or importing fails, you can still enter link fields manually.</p>
+            <p>Being able to view an asset in your portal does not necessarily mean you are permitted to import its metadata into another tool or share it. Follow your organisation's policies and the asset owner's restrictions.</p>
+            <p>For background on the component, see <a href="https://developers.bynder.com/universal-compact-view" target="_blank" rel="noopener noreferrer">Bynder's Universal Compact View documentation</a>.</p>
+        </section>
+
+        <section id="privacy">
+            <h2>4. Data handling &amp; privacy</h2>
+            <h3>Information in your browser</h3>
+            <p>Portal domains, entered search fields, and imported metadata are processed in the open page. Imported fields are not intentionally saved in persistent browser storage. The picker may temporarily remember the connected portal domain locally; that preference is cleared when the picker closes. Local credential entries left by earlier versions of this integration are removed when this site loads.</p>
+            <p>Your browser may retain page state, cached resources, clipboard contents, or browsing history. Closing the picker does not erase those browser records or copies of links you have already shared. On a shared device, also consider your portal's sign-out options and the browser's privacy controls.</p>
+
+            <h3>Connections to other services</h3>
+            <p>The picker contacts the selected portal for authentication and asset data, uses Bynder's authentication callback service, and downloads the picker software and display resources from Bynder's distribution services. Asset previews may load from the portal's content hosts. Your portal may also use an external identity provider for sign-in.</p>
+            <p>These services receive the network requests needed to perform those actions, which can include an IP address and ordinary browser/request information. Their own privacy policies, logging practices, and retention settings apply. The Link Builder does not control their records. Website hosting providers may also maintain ordinary access logs when serving this site.</p>
+
+            <h3>Analytics and security measures</h3>
+            <p>This site does not load Google Analytics or other usage-tracking scripts. The picker is checked against an approved software fingerprint before it runs, and its API connections are restricted to the selected portal. Its telemetry connections are blocked. These measures reduce exposure; they are not a promise that browser processing is risk-free or that no external service receives information.</p>
+        </section>
+
+        <section id="responsibilities">
+            <h2>5. Your responsibilities &amp; sharing links</h2>
+            <ul>
+                <li><strong>Use only information you are authorised to handle.</strong> Do not use the tool to bypass access controls or to expose confidential information contrary to your organisation's policies.</li>
+                <li><strong>Review the result.</strong> Check the portal domain, metadata values, and generated link before using or sharing it. Renamed fields or differences in portal configuration can affect search results.</li>
+                <li><strong>Treat the URL as information you are sharing.</strong> Metaproperty names, options, tags, and keywords can appear directly in the generated URL. Copying or sharing a link exposes those values to its recipients, even if they cannot access the underlying assets.</li>
+                <li><strong>Consider where links travel.</strong> Opening a link sends its search parameters to the destination portal. Links may also be retained in browser history, destination logs, messages, or other services where you paste them. Do not put passwords, access tokens, or other secrets into search fields.</li>
+            </ul>
+        </section>
+
+        <section id="ownership">
+            <h2>6. Intellectual property</h2>
+            <p>The Bynder name, logo, and related trademarks belong to Bynder B.V. This tool is an independent utility and is not an official Bynder product unless explicitly stated otherwise. Using Link Builder does not give you additional rights to assets or metadata accessed through your portal.</p>
+        </section>
+
+        <section id="availability">
+            <h2>7. Accuracy &amp; availability</h2>
+            <p>The service is provided on an “as is” and “as available” basis. The service owner does not guarantee that generated links will produce a particular result, that the tool will meet every use case, or that the asset picker will always be available. You are responsible for checking the output before relying on it.</p>
+            <p>Portal changes, browser behaviour, and updates to third-party services may affect functionality. Features may be changed, suspended, or withdrawn, including when a security check prevents the picker from loading.</p>
+        </section>
+
+        <section id="changes">
+            <h2>8. Changes to this page</h2>
+            <p>These terms and the description of data handling may be updated as the service changes. The date at the top identifies the latest revision. Please review this page before continuing to use the service after an update.</p>
+        </section>
     </main>
 </div>
-
-<script>
-    let currentPage = window.location.pathname.split("/").pop();
-
-    if (currentPage === "index.html" || currentPage === "") {
-        document.getElementById("nav-home").classList.add("active");
-    } else if (currentPage === "terms.html") {
-        document.getElementById("nav-terms").classList.add("active");
-    }
-</script>
-<script>
-    let lastScrollY = window.scrollY;
-    const header = document.querySelector(".header");
-
-    window.addEventListener("scroll", () => {
-        if (window.scrollY > lastScrollY) {
-            header.classList.add("hidden");
-        } else {
-            header.classList.remove("hidden");
-        }
-        lastScrollY = window.scrollY;
-    });
-</script>
 
 </body>
 </html>

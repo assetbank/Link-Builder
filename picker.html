@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="referrer" content="no-referrer">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://ucv.bynder.com/5.0.5/modules/compactview/bynder-compactview-6-latest.js; style-src 'self' 'unsafe-inline' https://d8ejoa1fys2rk.cloudfront.net; font-src https://d8ejoa1fys2rk.cloudfront.net; img-src https: data: blob:; connect-src https:; base-uri 'none'; form-action 'none'; object-src 'none'">
+    <title>Connect to Bynder</title>
+    <script src="site.js"></script>
+    <link rel="stylesheet" href="picker.css">
+    <script type="module" src="picker.mjs"></script>
+</head>
+<body>
+    <div id="connect-panel">
+        <p id="connection-status" role="status">Preparing your connection…</p>
+        <button id="connect" type="button" disabled>Connect to Bynder</button>
+        <p>Sign in on your Bynder portal. This picker keeps its connection only while it is open.</p>
+    </div>
+    <div id="picker"></div>
+</body>
+</html>

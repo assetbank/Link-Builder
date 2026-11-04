@@ -1,3 +1,5 @@
+import { validPortal, metadataOnly, matchesMessage } from './picker-common.mjs';
+
 function sanitizeDatabaseName(input) {
     return input.replace(/[^a-zA-Z0-9.-]/g, "_");
 }
@@ -14,8 +16,7 @@ function sanitizeBaseURL(input) {
 }
 
 function isValidDomain(value) {
-    // Must have at least one dot, no spaces, only valid domain characters
-    return /^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value);
+    return validPortal(value);
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -274,7 +275,50 @@ document.addEventListener("DOMContentLoaded", function () {
     const ucvOpenBtn = document.getElementById("ucv-open-btn");
     const ucvContainer = document.getElementById("ucv-container");
     const ucvStatus = document.getElementById("ucv-status");
-    let ucvOpen = false;
+    let pickerSession = null;
+
+    function closePicker(message = '') {
+        if (pickerSession) {
+            clearTimeout(pickerSession.timeout);
+            pickerSession.frame.contentWindow?.postMessage({
+                channel: 'link-builder-picker', request: pickerSession.request, type: 'close'
+            }, location.origin);
+            pickerSession.frame.remove();
+            pickerSession = null;
+        }
+        ucvContainer.replaceChildren();
+        ucvContainer.classList.remove('active');
+        ucvOpenBtn.textContent = 'Open Asset Browser';
+        ucvStatus.textContent = message;
+        try {
+            for (const key of ['cvrt', 'cvad', 'cvp']) localStorage.removeItem(key);
+        } catch { /* Browser storage may be disabled. */ }
+    }
+
+    baseURLInput.addEventListener('input', () => closePicker());
+    window.addEventListener('pagehide', () => closePicker());
+    window.addEventListener('message', event => {
+        const session = pickerSession;
+        if (!session || !matchesMessage(event, session.frame.contentWindow, location.origin, session.request)) return;
+        if (baseURLInput.value.trim() !== session.domain) { closePicker(); return; }
+        if (event.data.type === 'ready') {
+            ucvStatus.textContent = 'Connection ends when you close the browser or select an asset.';
+        } else if (event.data.type === 'selected') {
+            try {
+                const asset = metadataOnly(event.data.asset);
+                closePicker();
+                populateFromAsset(asset);
+            } catch {
+                closePicker('The asset metadata could not be imported. Please enter the fields manually.');
+            }
+        } else if (event.data.type === 'closed') {
+            closePicker('Disconnected.');
+        } else if (event.data.type === 'expired') {
+            closePicker('Your connection expired. Open the asset browser to reconnect.');
+        } else if (event.data.type === 'error') {
+            closePicker('The asset could not be imported. Please enter its metadata manually.');
+        }
+    });
 
     function updateUCVButton() {
         const domain = document.getElementById("baseURL").value.trim();
@@ -292,56 +336,24 @@ document.addEventListener("DOMContentLoaded", function () {
     baseURLInput.addEventListener("input", updateUCVButton);
     updateUCVButton();
 
-    ucvOpenBtn.addEventListener("click", function () {
-        const domain = document.getElementById("baseURL").value.trim();
+    ucvOpenBtn.addEventListener('click', () => {
+        if (pickerSession) { closePicker('Disconnected.'); return; }
+        const domain = baseURLInput.value.trim();
         if (!isValidDomain(domain)) return;
-
-        if (ucvOpen) {
-            ucvContainer.innerHTML = "";
-            ucvContainer.classList.remove("active");
-            ucvOpen = false;
-            ucvOpenBtn.textContent = "Open Asset Browser";
-            ucvStatus.textContent = "";
-            return;
-        }
-
-        ucvOpen = true;
-        ucvContainer.classList.add("active");
-        ucvOpenBtn.textContent = "Close Asset Browser";
-        ucvStatus.textContent = "";
-
-        const ucvApi = (typeof BynderCompactView !== "undefined")
-            ? BynderCompactView
-            : (typeof CompactView !== "undefined" ? CompactView : null);
-
-        if (!ucvApi) {
-            ucvStatus.style.color = "#ef4444";
-            ucvStatus.textContent = "Asset browser failed to load. Please refresh the page and try again.";
-            ucvOpen = false;
-            ucvContainer.classList.remove("active");
-            ucvOpenBtn.textContent = "Open Asset Browser";
-            return;
-        }
-
-        ucvApi.open({
-            container: ucvContainer,
-            portal: {
-                url: domain,
-                editable: false
-            },
-            mode: "SingleSelect",
-            onSuccess: function (assets) {
-                if (!assets || assets.length === 0) return;
-                const asset = assets[0];
-                // Close and reset the UCV so the "Add asset" button doesn't stay in loading state
-                ucvContainer.innerHTML = "";
-                ucvContainer.classList.remove("active");
-                ucvOpen = false;
-                ucvOpenBtn.textContent = "Open Asset Browser";
-
-                populateFromAsset(asset);
-            }
-        });
+        const request = crypto.randomUUID();
+        const frame = document.createElement('iframe');
+        frame.title = 'Bynder asset browser';
+        frame.referrerPolicy = 'no-referrer';
+        // Separate document for complete teardown and a portal-specific CSP.
+        // This is same-origin and is NOT claimed as an isolation boundary.
+        frame.src = `/picker.html#${new URLSearchParams({ portal: domain, request })}`;
+        pickerSession = { frame, domain, request, timeout: setTimeout(() => {
+            closePicker('Your connection expired. Open the asset browser to reconnect.');
+        }, 15 * 60 * 1000) };
+        ucvContainer.replaceChildren(frame);
+        ucvContainer.classList.add('active');
+        ucvOpenBtn.textContent = 'Close & Disconnect';
+        ucvStatus.textContent = 'Opening asset browser…';
     });
 
     function populateFromAsset(asset) {
@@ -379,8 +391,10 @@ document.addEventListener("DOMContentLoaded", function () {
         metaEntries.forEach(function (entry, i) {
             const row = document.createElement("div");
             row.className = "form-group metaproperty-row";
-            row.innerHTML = `<div><input type="text" placeholder="🔧 Metaproperty ${i + 1}" value="${escapeAttr(entry.field)}"></div><div><input type="text" placeholder="📋 Option ${i + 1}" value="${escapeAttr(entry.value)}"></div><button type="button" class="delete-row-btn" title="Remove row">×</button>`;
+            row.innerHTML = `<div><input type="text" placeholder="🔧 Metaproperty ${i + 1}" ></div><div><input type="text" placeholder="📋 Option ${i + 1}" ></div><button type="button" class="delete-row-btn" title="Remove row">×</button>`;
             row.querySelectorAll("input").forEach(input => input.addEventListener("input", generateLink));
+            row.querySelectorAll("input")[0].value = entry.field;
+            row.querySelectorAll("input")[1].value = entry.value;
             metaContainer.appendChild(row);
         });
 
@@ -399,8 +413,10 @@ document.addEventListener("DOMContentLoaded", function () {
             const n = i * 2 + 1;
             const row = document.createElement("div");
             row.className = "form-group tag-row";
-            row.innerHTML = `<div><input type="text" placeholder="🏷️ Tag ${n}" value="${escapeAttr(pair.t1)}"></div><div><input type="text" placeholder="🏷️ Tag ${n + 1}" value="${escapeAttr(pair.t2)}"></div><button type="button" class="delete-row-btn" title="Remove row">×</button>`;
+            row.innerHTML = `<div><input type="text" placeholder="🏷️ Tag ${n}" ></div><div><input type="text" placeholder="🏷️ Tag ${n + 1}" ></div><button type="button" class="delete-row-btn" title="Remove row">×</button>`;
             row.querySelectorAll("input").forEach(input => input.addEventListener("input", generateLink));
+            row.querySelectorAll("input")[0].value = pair.t1;
+            row.querySelectorAll("input")[1].value = pair.t2;
             tagContainer.appendChild(row);
         });
 
@@ -411,9 +427,6 @@ document.addEventListener("DOMContentLoaded", function () {
         switchToTab(0);
     }
 
-    function escapeAttr(str) {
-        return String(str).replace(/"/g, "&quot;").replace(/'/g, "&#39;");
-    }
 
     // --- end UCV ---
 

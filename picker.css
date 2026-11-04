@@ -1,0 +1,6 @@
+body { margin: 0; font-family: system-ui, sans-serif; color: #243650; background: white; }
+#connect-panel { padding: 32px 16px; text-align: center; }
+button { border: 0; border-radius: 6px; padding: 12px 20px; background: #0545ac; color: white; cursor: pointer; }
+button:disabled { opacity: .5; cursor: wait; }
+#picker { height: 650px; }
+[hidden] { display: none !important; }
