@@ -39,11 +39,18 @@ test('existing metaproperty, tag and status URLs are preserved', async () => {
     const { context, page, errors } = await setup();
     try {
         assert(await page.locator('#panel1 .copy-link-btn').isDisabled());
+        const open = page.locator('#panel1 .open-link');
+        assert(await open.isVisible());
+        assert(await open.isDisabled());
+        assert.equal(await open.getAttribute('href'), null);
+        assert.equal(await open.getAttribute('tabindex'), '-1');
         await page.getByLabel('Portal URL', { exact: true }).fill('https://portal.example/assets');
         assert.equal(await page.locator('#baseURL').inputValue(), 'portal.example');
         await page.getByLabel('Metaproperty 1', { exact: true }).fill('Campaign.Name');
         assert(await page.locator('#panel1 .copy-link-btn').isDisabled());
         await page.getByLabel('Option 1', { exact: true }).fill('Spring Launch');
+        assert(await open.isEnabled());
+        assert.equal(await open.getAttribute('tabindex'), null);
         await page.getByLabel('Tag 1', { exact: true }).fill('Summer & café');
         await page.locator('#status-grid-1').getByRole('button', { name: 'Archived', exact: true }).click();
         assert.equal(await page.locator('#output a').getAttribute('href'),
@@ -63,6 +70,7 @@ test('Boolean search reproduces the captured multi-keyword and metaproperty URL'
         await page.locator('#value1').fill('Image');
         await page.getByLabel('Keyword 1', { exact: true }).fill('test');
         await page.getByLabel('Keyword 2', { exact: true }).fill('08');
+        await page.getByRole('button', { name: 'Add keyword', exact: true }).click();
         await page.getByLabel('Keyword 3', { exact: true }).fill(' test ');
         const expected = 'https://jakob-spott.bynder.com/search/set/?resetsearch&field=metaproperty_Asset_Type&value=Image&filterType=add&field=singletext&value=test&filterType=add&field=singletext&value=08&filterType=add';
         assert.equal(await page.locator('#output a').getAttribute('href'), expected);
@@ -101,7 +109,7 @@ test('combined text, tags and rights preserve query characters and clear without
         await page.locator('#baseURL').fill('portal.example');
         const query = 'café & sun #1 = 50% + \"blue\"';
         await page.getByRole('button', { name: 'Add keyword', exact: true }).click();
-        await page.getByLabel('Keyword 5', { exact: true }).fill(query);
+        await page.getByLabel('Keyword 3', { exact: true }).fill(query);
         await page.locator('#tag1').fill('Campaign & launch');
         await page.getByRole('button', { name: 'Limited usage', exact: true }).click();
         let url = new URL(await page.locator('#output a').getAttribute('href'));
@@ -110,7 +118,7 @@ test('combined text, tags and rights preserve query characters and clear without
         assert.deepEqual(url.searchParams.getAll('value'), ['Campaign & launch', query, '1']);
         assert.deepEqual(url.searchParams.getAll('filterType'), ['add', 'add', 'add']);
         assert.equal(url.hash, '');
-        await page.getByLabel('Keyword 5', { exact: true }).fill('');
+        await page.getByLabel('Keyword 3', { exact: true }).fill('');
         await page.locator('#tag1').fill('metaproperty_literal');
         url = new URL(await page.locator('#output a').getAttribute('href'));
         assert.equal(url.pathname, '/search/media/');
@@ -118,7 +126,9 @@ test('combined text, tags and rights preserve query characters and clear without
         await page.getByRole('button', { name: 'Limited usage', exact: true }).click();
         await page.locator('#tag1').fill('');
         assert(await page.locator('#panel1 .copy-link-btn').isDisabled());
-        assert(await page.locator('#panel1 .open-link').isHidden());
+        assert(await page.locator('#panel1 .open-link').isVisible());
+        assert(await page.locator('#panel1 .open-link').isDisabled());
+        assert.equal(await page.locator('#panel1 .open-link').getAttribute('href'), null);
         assert.equal(await page.locator('#output a').count(), 0);
         await page.locator('#keyword1').fill(query);
         url = new URL(await page.locator('#output a').getAttribute('href'));
@@ -134,18 +144,18 @@ test('added and deleted rows keep labels, values and keyboard focus', async () =
     const { context, page } = await setup(390);
     try {
         await page.getByRole('button', { name: 'Add metaproperty', exact: true }).click();
-        const field = page.getByLabel('Metaproperty 5', { exact: true });
+        const field = page.getByLabel('Metaproperty 2', { exact: true });
         assert(await field.evaluate(el => el === document.activeElement));
         await field.fill('Brand');
-        await page.getByLabel('Option 5', { exact: true }).fill('Blue');
-        await page.getByRole('button', { name: 'Remove metaproperty 2', exact: true }).click();
-        assert.equal(await page.getByLabel('Metaproperty 4', { exact: true }).inputValue(), 'Brand');
-        assert.equal(await page.getByLabel('Option 4', { exact: true }).inputValue(), 'Blue');
-        assert(await page.getByLabel('Metaproperty 2', { exact: true }).evaluate(el => el === document.activeElement));
+        await page.getByLabel('Option 2', { exact: true }).fill('Blue');
+        await page.getByRole('button', { name: 'Remove metaproperty 1', exact: true }).click();
+        assert.equal(await page.getByLabel('Metaproperty 1', { exact: true }).inputValue(), 'Brand');
+        assert.equal(await page.getByLabel('Option 1', { exact: true }).inputValue(), 'Blue');
+        assert(await page.getByLabel('Metaproperty 1', { exact: true }).evaluate(el => el === document.activeElement));
         await page.getByRole('button', { name: 'Add tags', exact: true }).click();
-        assert(await page.getByLabel('Tag 5', { exact: true }).evaluate(el => el === document.activeElement));
-        await page.getByRole('button', { name: 'Remove tags 3 and 4', exact: true }).click();
-        assert.equal(await page.locator('#tag-rows input').count(), 4);
+        assert(await page.getByLabel('Tag 3', { exact: true }).evaluate(el => el === document.activeElement));
+        await page.getByRole('button', { name: 'Remove tags 1 and 2', exact: true }).click();
+        assert.equal(await page.locator('#tag-rows input').count(), 2);
         assert.equal(await page.locator('.builder input').evaluateAll(inputs => inputs.filter(input => input.labels.length === 0).length), 0);
     } finally { await context.close(); }
 });
@@ -203,6 +213,52 @@ test('responsive controls remain on-screen and shared header matches the terms p
             await page.goto(`${origin}/terms/`);
             assert.deepEqual(await page.locator('.header').boundingBox(), header);
             assert.deepEqual(await page.locator('.logo').boundingBox(), logo);
+        } finally { await context.close(); }
+    }
+});
+
+
+test('compact defaults keep copy and the full link accessible while scrolling', async () => {
+    for (const width of [390, 1440]) {
+        const { context, page, errors } = await setup(width);
+        try {
+            await page.setViewportSize({ width, height: 740 });
+            assert.equal(await page.locator('.metaproperty-row').count(), 1);
+            assert.equal(await page.locator('.tag-row').count(), 1);
+            assert.equal(await page.locator('.keyword-row').count(), 2);
+            await page.locator('#baseURL').fill('portal.example');
+            await page.locator('#tag1').fill('Launch');
+            const copy = page.locator('#panel1 .copy-link-btn');
+            const withinViewport = async () => {
+                const box = await copy.boundingBox();
+                assert(box && box.y >= 0 && box.y + box.height <= 740);
+            };
+            await page.evaluate(() => scrollTo({ top: 0, behavior: 'instant' }));
+            await withinViewport();
+            await copy.click();
+            assert.match((await page.evaluate(() => window.copiedLinks)).at(-1), /value=Launch/);
+            await page.evaluate(() => scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' }));
+            await withinViewport();
+            await page.locator('#keyword1').fill('long keyword '.repeat(50));
+            const expected = await page.locator('#output a').getAttribute('href');
+            await page.getByRole('button', { name: 'View full link', exact: true }).click();
+            assert(await page.locator('#output a').isVisible());
+            assert.equal(await page.locator('.result-toggle').getAttribute('aria-expanded'), 'true');
+            await withinViewport();
+            await copy.click();
+            assert.equal((await page.evaluate(() => window.copiedLinks)).at(-1), expected);
+            await page.getByRole('button', { name: 'Collapse link', exact: true }).click();
+            await page.evaluate(() => { navigator.clipboard.writeText = async () => { throw new Error('Denied'); }; });
+            await copy.click();
+            assert(await page.locator('#output a').isVisible());
+            assert.equal(await page.locator('.result-toggle').getAttribute('aria-expanded'), 'true');
+            assert.match(await page.locator('.copy-status').textContent(), /copy it manually/);
+            await withinViewport();
+            await page.locator('#tab3').click();
+            assert(await copy.isHidden());
+            await page.locator('#tab1').click();
+            await withinViewport();
+            assert.deepEqual(errors, []);
         } finally { await context.close(); }
     }
 });
