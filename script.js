@@ -20,31 +20,39 @@ function isValidDomain(value) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-    let currentPanel = 0;
     const panels = document.querySelectorAll(".tab-panel");
     const tabButtons = document.querySelectorAll(".tab-btn");
 
     setTimeout(handleInputChange, 0);
 
     function handleInputChange() {
-        if (currentPanel === 0) {
-            generateLink();
-        } else if (currentPanel === 1) {
-            generateKeywordLink();
-        }
+        generateLink();
     }
 
     function switchToTab(index) {
-        panels[currentPanel].classList.remove("active");
-        tabButtons[currentPanel].classList.remove("active");
-        currentPanel = index;
-        panels[currentPanel].classList.add("active");
-        tabButtons[currentPanel].classList.add("active");
+        panels.forEach((panel, i) => {
+            panel.classList.toggle('active', i === index);
+            panel.hidden = i !== index;
+            tabButtons[i].classList.toggle('active', i === index);
+            tabButtons[i].setAttribute('aria-selected', String(i === index));
+            tabButtons[i].tabIndex = i === index ? 0 : -1;
+        });
         handleInputChange();
     }
 
     tabButtons.forEach((btn, index) => {
-        btn.addEventListener("click", () => switchToTab(index));
+        btn.addEventListener('click', () => switchToTab(index));
+        btn.addEventListener('keydown', event => {
+            let next;
+            if (event.key === 'ArrowRight') next = (index + 1) % tabButtons.length;
+            else if (event.key === 'ArrowLeft') next = (index + tabButtons.length - 1) % tabButtons.length;
+            else if (event.key === 'Home') next = 0;
+            else if (event.key === 'End') next = tabButtons.length - 1;
+            else return;
+            event.preventDefault();
+            switchToTab(next);
+            tabButtons[next].focus();
+        });
     });
 
     const baseURLInput = document.getElementById("baseURL");
@@ -64,150 +72,198 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".button-grid button").forEach(button => {
         button.addEventListener("click", function () {
             this.classList.toggle("selected");
+            this.setAttribute("aria-pressed", String(this.classList.contains("selected")));
             handleInputChange();
         });
     });
 
-    function updateDeleteButtons(containerId, rowClass) {
-        const rows = document.querySelectorAll(`#${containerId} .${rowClass}`);
-        rows.forEach(row => {
-            const btn = row.querySelector(".delete-row-btn");
-            if (btn) btn.style.visibility = rows.length > 1 ? "visible" : "hidden";
+    let nextFieldId = 0;
+    const rowSettings = {
+        metaproperty: { labels: ['Metaproperty', 'Option'], icons: ['sliders', 'option'], help: 'metaproperty-help' },
+        tag: { labels: ['Tag', 'Tag'], icons: ['tag', 'tag'], help: 'tag-help' },
+        keyword: { labels: ['Keyword'], icons: ['search'] }
+    };
+
+    function createRow(kind, number, values = []) {
+        const settings = rowSettings[kind];
+        const row = document.createElement('div');
+        row.className = `form-group ${kind}-row`;
+        settings.labels.forEach((name, i) => {
+            const label = document.createElement('label');
+            label.className = 'field';
+            const caption = document.createElement('span');
+            caption.className = 'field-label';
+            caption.textContent = `${name} ${kind === 'tag' ? number + i : number}`;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.id = `added-field-${++nextFieldId}`;
+            input.placeholder = caption.textContent;
+            input.value = values[i] ?? '';
+            input.autocomplete = 'off';
+            input.spellcheck = false;
+            if (settings.help) input.setAttribute('aria-describedby', settings.help);
+            label.htmlFor = input.id;
+            input.addEventListener('input', generateLink);
+            const control = document.createElement('span');
+            control.className = 'input-wrap';
+            const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            icon.setAttribute('class', 'field-icon icon');
+            icon.setAttribute('viewBox', '0 0 24 24');
+            icon.setAttribute('aria-hidden', 'true');
+            icon.setAttribute('focusable', 'false');
+            const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+            use.setAttribute('href', `/builder-icons.svg#${settings.icons[i]}`);
+            icon.appendChild(use);
+            control.append(icon, input);
+            label.append(caption, control);
+            row.appendChild(label);
         });
+        if (kind !== 'keyword') {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'delete-row-btn';
+            button.textContent = '×';
+            row.appendChild(button);
+        }
+        return row;
     }
 
-    function renumberRows(containerId, rowClass, placeholderFn) {
+    function updateDeleteButtons(containerId, rowClass) {
+        const kind = rowClass.replace('-row', '');
         const rows = document.querySelectorAll(`#${containerId} .${rowClass}`);
         rows.forEach((row, i) => {
-            const inputs = row.querySelectorAll("input");
-            placeholderFn(inputs, i + 1);
+            const number = kind === 'tag' ? i * 2 + 1 : i + 1;
+            row.querySelectorAll('.field-label').forEach((label, j) => {
+                label.textContent = `${rowSettings[kind].labels[j]} ${kind === 'tag' ? number + j : number}`;
+                label.parentElement.querySelector('input').placeholder = label.textContent;
+            });
+            const btn = row.querySelector('.delete-row-btn');
+            if (btn) {
+                btn.style.visibility = rows.length > 1 ? 'visible' : 'hidden';
+                btn.disabled = rows.length === 1;
+                const name = kind === 'tag' ? `Remove tags ${number} and ${number + 1}` : `Remove metaproperty ${number}`;
+                btn.title = name;
+                btn.setAttribute('aria-label', name);
+            }
         });
     }
 
-    updateDeleteButtons("metaproperty-rows", "metaproperty-row");
-    updateDeleteButtons("tag-rows", "tag-row");
+    for (const kind of ['metaproperty', 'tag']) {
+        const containerId = kind === 'metaproperty' ? 'metaproperty-rows' : 'tag-rows';
+        const rowClass = `${kind}-row`;
+        const container = document.getElementById(containerId);
+        updateDeleteButtons(containerId, rowClass);
+        container.addEventListener('click', event => {
+            const button = event.target.closest('.delete-row-btn');
+            if (!button) return;
+            const rows = [...container.querySelectorAll(`.${rowClass}`)];
+            if (rows.length <= 1) return;
+            const row = button.closest(`.${rowClass}`);
+            const index = rows.indexOf(row);
+            row.remove();
+            updateDeleteButtons(containerId, rowClass);
+            generateLink();
+            const remaining = container.querySelectorAll(`.${rowClass}`);
+            remaining[Math.min(index, remaining.length - 1)].querySelector('input').focus();
+        });
+        document.getElementById(`add-${kind}-btn`).addEventListener('click', () => {
+            const count = container.querySelectorAll(`.${rowClass}`).length;
+            const row = createRow(kind, kind === 'tag' ? count * 2 + 1 : count + 1);
+            container.appendChild(row);
+            updateDeleteButtons(containerId, rowClass);
+            row.querySelector('input').focus();
+        });
+    }
 
-    document.getElementById("metaproperty-rows").addEventListener("click", function (e) {
-        if (e.target.classList.contains("delete-row-btn")) {
-            const rows = document.querySelectorAll("#metaproperty-rows .metaproperty-row");
-            if (rows.length > 1) {
-                e.target.closest(".metaproperty-row").remove();
-                generateLink();
-                updateDeleteButtons("metaproperty-rows", "metaproperty-row");
-                renumberRows("metaproperty-rows", "metaproperty-row", (inputs, n) => {
-                    if (!inputs[0].value) inputs[0].placeholder = `🔧 Metaproperty ${n}`;
-                    if (!inputs[1].value) inputs[1].placeholder = `📋 Option ${n}`;
-                });
+    document.getElementById('add-keyword-btn').addEventListener('click', () => {
+        const container = document.getElementById('keyword-rows');
+        const row = createRow('keyword', container.querySelectorAll('.keyword-row').length + 1);
+        container.appendChild(row);
+        row.querySelector('input').focus();
+    });
+
+    const outputStates = new WeakMap();
+    document.querySelectorAll('.generated-link-container').forEach(section => {
+        const state = { revision: 0, timer: null };
+        outputStates.set(section, state);
+        const button = section.querySelector('.copy-link-btn');
+        const feedback = section.querySelector('.copy-status');
+        button.addEventListener('click', async () => {
+            const link = section.querySelector('.output-container a');
+            if (!link) return;
+            const revision = ++state.revision;
+            clearTimeout(state.timer);
+            button.disabled = true;
+            try {
+                await navigator.clipboard.writeText(link.href);
+                if (revision !== state.revision) return;
+                button.querySelector('.button-label').textContent = 'Copied';
+                feedback.textContent = 'Link copied to clipboard.';
+                state.timer = setTimeout(() => {
+                    button.querySelector('.button-label').textContent = 'Copy link';
+                    feedback.textContent = '';
+                }, 2000);
+            } catch {
+                if (revision !== state.revision) return;
+                feedback.textContent = 'Could not copy. Select the URL above and copy it manually.';
+            } finally {
+                if (revision === state.revision) button.disabled = false;
             }
-        }
-    });
-
-    document.getElementById("add-metaproperty-btn").addEventListener("click", function () {
-        const rows = document.querySelectorAll("#metaproperty-rows .metaproperty-row");
-        const n = rows.length + 1;
-        const row = document.createElement("div");
-        row.className = "form-group metaproperty-row";
-        row.innerHTML = `<div><input type="text" placeholder="🔧 Metaproperty ${n}"></div><div><input type="text" placeholder="📋 Option ${n}"></div><button type="button" class="delete-row-btn" title="Remove row">×</button>`;
-        row.querySelectorAll("input").forEach(input => input.addEventListener("input", generateLink));
-        document.getElementById("metaproperty-rows").appendChild(row);
-        updateDeleteButtons("metaproperty-rows", "metaproperty-row");
-    });
-
-    document.getElementById("tag-rows").addEventListener("click", function (e) {
-        if (e.target.classList.contains("delete-row-btn")) {
-            const rows = document.querySelectorAll("#tag-rows .tag-row");
-            if (rows.length > 1) {
-                e.target.closest(".tag-row").remove();
-                generateLink();
-                updateDeleteButtons("tag-rows", "tag-row");
-                renumberRows("tag-rows", "tag-row", (inputs, n) => {
-                    const base = (n - 1) * 2 + 1;
-                    if (!inputs[0].value) inputs[0].placeholder = `🏷️ Tag ${base}`;
-                    if (!inputs[1].value) inputs[1].placeholder = `🏷️ Tag ${base + 1}`;
-                });
-            }
-        }
-    });
-
-    document.getElementById("add-tag-btn").addEventListener("click", function () {
-        const rows = document.querySelectorAll("#tag-rows .tag-row");
-        const n = rows.length * 2 + 1;
-        const row = document.createElement("div");
-        row.className = "form-group tag-row";
-        row.innerHTML = `<div><input type="text" placeholder="🏷️ Tag ${n}"></div><div><input type="text" placeholder="🏷️ Tag ${n + 1}"></div><button type="button" class="delete-row-btn" title="Remove row">×</button>`;
-        row.querySelectorAll("input").forEach(input => input.addEventListener("input", generateLink));
-        document.getElementById("tag-rows").appendChild(row);
-        updateDeleteButtons("tag-rows", "tag-row");
-    });
-
-    document.getElementById("add-keyword-btn").addEventListener("click", function () {
-        const rows = document.querySelectorAll("#keyword-rows .keyword-row");
-        const n = rows.length + 1;
-        const row = document.createElement("div");
-        row.className = "form-group keyword-row";
-        row.innerHTML = `<input type="text" placeholder="🔑 Keyword ${n}">`;
-        row.querySelector("input").addEventListener("input", generateKeywordLink);
-        document.getElementById("keyword-rows").appendChild(row);
-    });
-
-    document.querySelectorAll(".output-container").forEach(box => {
-        box.addEventListener("click", function () {
-            const p = this.querySelector("p");
-            const linkElement = p.querySelector("a");
-
-            if (!linkElement) return;
-
-            navigator.clipboard.writeText(linkElement.href).then(() => {
-                const original = p.innerHTML;
-                p.innerHTML = "Copied!";
-                p.className = "copied-state";
-
-                setTimeout(() => {
-                    p.innerHTML = original;
-                    p.className = "";
-                }, 1200);
-            }).catch(err => {
-                console.error("Failed to copy link: ", err);
-            });
         });
     });
 
+    function updateOutputActions(el, url) {
+        const section = el.closest('.generated-link-container');
+        const state = outputStates.get(section);
+        state.revision++;
+        clearTimeout(state.timer);
+        const button = section.querySelector('.copy-link-btn');
+        button.disabled = !url;
+        button.querySelector('.button-label').textContent = 'Copy link';
+        section.querySelector('.copy-status').textContent = '';
+        const open = section.querySelector('.open-link');
+        open.hidden = !url;
+        if (url) open.href = url;
+        else open.removeAttribute('href');
+    }
+
     function setEmpty(el, msg) {
-        el.innerHTML = msg;
-        el.className = "empty-state";
+        el.textContent = msg;
+        el.className = 'empty-state';
+        updateOutputActions(el, null);
     }
 
     function setLink(el, url) {
-        el.innerHTML = "";
-        el.className = "";
-        const a = document.createElement("a");
+        el.replaceChildren();
+        el.className = '';
+        const a = document.createElement('a');
         a.href = url;
-        a.target = "_blank";
-        a.rel = "noopener noreferrer";
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
         a.textContent = url;
         el.appendChild(a);
+        updateOutputActions(el, url);
     }
 
     function setURLError(msg) {
-        const input = document.getElementById("baseURL");
-        input.style.borderColor = "#ef4444";
-        input.style.boxShadow = "0 0 0 3px rgba(239,68,68,0.1)";
-        let err = document.getElementById("baseURL-error");
-        if (!err) {
-            err = document.createElement("p");
-            err.id = "baseURL-error";
-            err.style.cssText = "color:#ef4444;font-size:12px;margin:4px 0 0;font-family:'Inter',sans-serif;text-align:center;";
-            input.parentNode.insertBefore(err, input.nextSibling);
+        const input = document.getElementById('baseURL');
+        input.setAttribute('aria-invalid', 'true');
+        input.setAttribute('aria-describedby', 'portal-help baseURL-error');
+        let error = document.getElementById('baseURL-error');
+        if (!error) {
+            error = document.createElement('p');
+            error.id = 'baseURL-error';
+            error.className = 'field-error';
+            input.closest('.baseURL-container').appendChild(error);
         }
-        err.textContent = msg;
+        error.textContent = msg;
     }
 
     function clearURLError() {
-        const input = document.getElementById("baseURL");
-        input.style.borderColor = "";
-        input.style.boxShadow = "";
-        const err = document.getElementById("baseURL-error");
-        if (err) err.remove();
+        const input = document.getElementById('baseURL');
+        input.removeAttribute('aria-invalid');
+        input.setAttribute('aria-describedby', 'portal-help');
+        document.getElementById('baseURL-error')?.remove();
     }
 
     function generateLink() {
@@ -229,14 +285,14 @@ document.addEventListener("DOMContentLoaded", function () {
         clearURLError();
 
         const params = [];
-        let hasValidInput = false;
+        let hasMetaproperties = false;
 
         document.querySelectorAll("#metaproperty-rows .metaproperty-row").forEach(function (row) {
             const inputs = row.querySelectorAll("input");
             const field = inputs[0].value.trim();
             const value = inputs[1].value.trim();
             if (field && value) {
-                hasValidInput = true;
+                hasMetaproperties = true;
                 params.push(`field=metaproperty_${encodeURIComponent(sanitizeDatabaseName(field))}&value=${encodeURIComponent(sanitizeDatabaseName(value))}`);
             }
         });
@@ -244,28 +300,38 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll("#tag-rows input").forEach(input => {
             const tag = input.value.trim();
             if (tag) {
-                hasValidInput = true;
                 params.push(`field=tags&value=${encodeURIComponent(tag)}`);
             }
         });
 
+        // Boolean search may add several text filters. Keep each query intact
+        // rather than guessing AND/OR semantics between words.
+        const queryInputs = document.querySelectorAll('#keyword-rows input');
+        const queries = new Set(Array.from(queryInputs, input => input.value.trim()).filter(Boolean));
+        for (const query of queries) {
+            params.push(`field=singletext&value=${encodeURIComponent(query)}`);
+        }
+
         const statusButtons = document.querySelectorAll("#status-grid-1 button.selected");
         if (statusButtons.length > 0) {
-            hasValidInput = true;
             statusButtons.forEach(button => {
                 const statusParam = button.dataset.statusParam;
                 if (statusParam) params.push(statusParam);
             });
         }
 
-        if (!hasValidInput) {
+        if (params.length === 0) {
             setEmpty(outputElement, "Your generated link will appear here");
             return;
         }
 
-        const generatedLink = params.some(p => p.includes("metaproperty_"))
-            ? `https://${baseURL}/search/set/?resetsearch&${params.join("&")}&filterType=add`
-            : `https://${baseURL}/search/media/?resetsearch&${params.join("&")}&filterType=add`;
+        const endpoint = hasMetaproperties || queries.size > 0 ? 'set' : 'media';
+        // Match captured combined searches: each field/value has its own add action.
+        // Preserve the established filters-only URL format when no text is supplied.
+        const filters = queries.size > 0
+            ? params.map(param => `${param}&filterType=add`).join('&')
+            : `${params.join('&')}&filterType=add`;
+        const generatedLink = `https://${baseURL}/search/${endpoint}/?resetsearch&${filters}`;
 
         setLink(outputElement, generatedLink);
     }
@@ -276,6 +342,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const ucvContainer = document.getElementById("ucv-container");
     const ucvStatus = document.getElementById("ucv-status");
     let pickerSession = null;
+    const importStatus = document.getElementById('import-status');
 
     function closePicker(message = '') {
         if (pickerSession) {
@@ -295,7 +362,11 @@ document.addEventListener("DOMContentLoaded", function () {
         } catch { /* Browser storage may be disabled. */ }
     }
 
-    baseURLInput.addEventListener('input', () => closePicker());
+    baseURLInput.addEventListener('input', () => {
+        closePicker();
+        importStatus.hidden = true;
+        importStatus.textContent = '';
+    });
     window.addEventListener('pagehide', () => closePicker());
     window.addEventListener('message', event => {
         const session = pickerSession;
@@ -388,14 +459,8 @@ document.addEventListener("DOMContentLoaded", function () {
             metaEntries.push({ field: "", value: "" });
         }
 
-        metaEntries.forEach(function (entry, i) {
-            const row = document.createElement("div");
-            row.className = "form-group metaproperty-row";
-            row.innerHTML = `<div><input type="text" placeholder="🔧 Metaproperty ${i + 1}" ></div><div><input type="text" placeholder="📋 Option ${i + 1}" ></div><button type="button" class="delete-row-btn" title="Remove row">×</button>`;
-            row.querySelectorAll("input").forEach(input => input.addEventListener("input", generateLink));
-            row.querySelectorAll("input")[0].value = entry.field;
-            row.querySelectorAll("input")[1].value = entry.value;
-            metaContainer.appendChild(row);
+        metaEntries.forEach((entry, i) => {
+            metaContainer.appendChild(createRow('metaproperty', i + 1, [entry.field, entry.value]));
         });
 
         // Populate tags — may be an array of strings or an object keyed by tag
@@ -409,74 +474,20 @@ document.addEventListener("DOMContentLoaded", function () {
             tagPairs.push({ t1: "", t2: "" });
         }
 
-        tagPairs.forEach(function (pair, i) {
-            const n = i * 2 + 1;
-            const row = document.createElement("div");
-            row.className = "form-group tag-row";
-            row.innerHTML = `<div><input type="text" placeholder="🏷️ Tag ${n}" ></div><div><input type="text" placeholder="🏷️ Tag ${n + 1}" ></div><button type="button" class="delete-row-btn" title="Remove row">×</button>`;
-            row.querySelectorAll("input").forEach(input => input.addEventListener("input", generateLink));
-            row.querySelectorAll("input")[0].value = pair.t1;
-            row.querySelectorAll("input")[1].value = pair.t2;
-            tagContainer.appendChild(row);
+        tagPairs.forEach((pair, i) => {
+            tagContainer.appendChild(createRow('tag', i * 2 + 1, [pair.t1, pair.t2]));
         });
 
         // Show feedback and switch to panel 1
         updateDeleteButtons("metaproperty-rows", "metaproperty-row");
         updateDeleteButtons("tag-rows", "tag-row");
-        ucvStatus.textContent = `Imported: ${asset.name || asset.databaseId}`;
+        importStatus.textContent = `Imported metadata from ${asset.name || 'the selected asset'}. Review the fields below.`;
+        importStatus.hidden = false;
         switchToTab(0);
+        tabButtons[0].focus();
     }
 
 
     // --- end UCV ---
 
-    function generateKeywordLink() {
-        const baseURL = document.getElementById("baseURL").value.trim();
-        const outputElement = document.getElementById("output2");
-
-        if (!baseURL) {
-            clearURLError();
-            setEmpty(outputElement, "Your generated link will appear here");
-            return;
-        }
-
-        if (!isValidDomain(baseURL)) {
-            setURLError("Please enter a valid domain, e.g. dam.bynder.com");
-            setEmpty(outputElement, "Your generated link will appear here");
-            return;
-        }
-
-        clearURLError();
-
-        const keywords = new Set();
-        let hasValidInput = false;
-
-        document.querySelectorAll("#keyword-rows input").forEach(input => {
-            const keyword = input.value.trim();
-            if (keyword) {
-                hasValidInput = true;
-                keywords.add(encodeURIComponent(keyword));
-            }
-        });
-
-        const keywordParams = Array.from(keywords).map(keyword => `field=text&value=${keyword}`);
-
-        const statusButtons = document.querySelectorAll("#status-grid-2 button.selected");
-        if (statusButtons.length > 0) {
-            hasValidInput = true;
-            statusButtons.forEach(button => {
-                const statusParam = button.dataset.statusParam;
-                if (statusParam) keywordParams.push(statusParam);
-            });
-        }
-
-        if (!hasValidInput) {
-            setEmpty(outputElement, "Your generated link will appear here");
-            return;
-        }
-
-        const generatedLink = `https://${baseURL}/search/set/?resetsearch&${keywordParams.join("&")}&filterType=add`;
-
-        setLink(outputElement, generatedLink);
-    }
 });

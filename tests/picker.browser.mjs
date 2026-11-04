@@ -89,6 +89,9 @@ async function signIn(env) {
 test('OAuth uses PKCE without offline scope; import is minimized; no tokens persist', async () => {
     const env = await setup();
     try {
+        await env.page.locator('#tab1').click();
+        await env.page.locator('#keyword1').fill('header');
+        await env.page.locator('#tab3').click();
         await signIn(env);
         assert(!env.auth().get('scope').includes('offline'));
         assert.equal(env.auth().get('code_challenge_method'), 'S256');
@@ -102,6 +105,10 @@ test('OAuth uses PKCE without offline scope; import is minimized; no tokens pers
         await env.page.waitForFunction(() => document.querySelector('#output a'));
         assert.equal(await env.page.locator('#ucv-container iframe').count(), 0);
         assert.equal(await env.page.locator('#metaproperty-rows input').first().inputValue(), 'Campaign');
+        const importedLink = new URL(await env.page.locator('#output a').getAttribute('href'));
+        assert(importedLink.searchParams.getAll('field').includes('singletext'));
+        assert(importedLink.searchParams.getAll('value').includes('header'));
+        assert.equal(await env.page.locator('#keyword1').inputValue(), 'header');
         assert.equal(await env.page.locator('#tag-rows input').first().inputValue(), '<img src=x onerror=alert(1)>');
         assert.equal(await env.page.locator('#tag-rows img').count(), 0);
         assert(!await env.page.locator('#output a').getAttribute('href').then(href => href.includes('private.example')));

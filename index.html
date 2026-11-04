@@ -4,13 +4,16 @@
     <meta charset="UTF-8">
     <meta name="referrer" content="no-referrer">
     <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
-    <link rel="icon" type="image/svg+xml" href="/Logo.svg">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=1">
     <script src="/site.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Link Builder</title>
     <link rel="stylesheet" href="/style.css?v=6">
+    <link rel="stylesheet" href="/builder.css?v=6">
+
 
 </head>
+<body>
 <header class="header">
 <img src="bynder-logo-white.png" alt="Logo" class="logo" style="cursor: pointer;">
 <nav class="nav">
@@ -20,157 +23,85 @@
 
 
 </header>
-<body>
+<main class="builder container-wrapper">
+    <h1 class="sr-only">Link Builder</h1>
+    <div class="container">
+        <div class="tab-bar" role="tablist" aria-label="Link building options">
+            <button type="button" class="tab-btn active" id="tab1" data-target="panel1" role="tab" aria-controls="panel1" aria-selected="true">Build link</button>
+            <button type="button" class="tab-btn" id="tab3" data-target="panel3" role="tab" aria-controls="panel3" aria-selected="false" tabindex="-1">Browse Assets</button>
+        </div>
+        <div class="baseURL-container">
+            <label class="field" for="baseURL">
+                <span class="field-label" id="baseURLLabel">Portal URL</span>
+                <span class="input-wrap"><svg class="field-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#globe"></use></svg><input type="text" id="baseURL" placeholder="dam.bynder.com" aria-describedby="portal-help" autocomplete="off" spellcheck="false" autocapitalize="none"></span>
+            </label>
+            <p class="sr-only" id="portal-help">Enter your Bynder portal domain.</p>
+        </div>
+        <p id="import-status" class="import-status" role="status" aria-live="polite" hidden></p>
+        <div class="tab-panel active" id="panel1" role="tabpanel" aria-labelledby="tab1">
 
-
-    <div class="container-wrapper">
-        <div class="container">
-
-            <div class="tab-bar">
-                <button class="tab-btn active" data-target="panel1">Metaproperties &amp; Tags</button>
-                <button class="tab-btn" data-target="panel2">Keywords</button>
-                <button class="tab-btn" data-target="panel3">Browse Assets <span class="tab-new-badge">New</span></button>
-            </div>
-
-            <div class="baseURL-container">
-                <h2 id="baseURLLabel">Add Portal URL</h2>
-                <input type="text" id="baseURL" placeholder="🌐 dam.lifestyle.com" aria-labelledby="baseURLLabel">
-            </div>
-
-            <div class="tab-panel active" id="panel1">
-                <hr class="section-divider">
-                <h2>Add Metaproperties and Options</h2>
-                <h3>Ensure proper capitalization. If a metaproperty or option name was changed at any point, make sure to use their <a href="https://support.bynder.com/hc/en-us/articles/6190351879186-Create-Metaproperties#h_01KNM026Q3NVKNYR38QH1W90JJ" target="_blank">database name</a>!</h3>
-                <div id="metaproperty-rows">
-                    <div class="form-group metaproperty-row">
-                        <div><input type="text" id="field1" placeholder="🔧 Metaproperty 1"></div>
-                        <div><input type="text" id="value1" placeholder="📋 Option 1"></div>
-                        <button type="button" class="delete-row-btn" title="Remove row">×</button>
-                    </div>
-                    <div class="form-group metaproperty-row">
-                        <div><input type="text" id="field2" placeholder="🔧 Metaproperty 2"></div>
-                        <div><input type="text" id="value2" placeholder="📋 Option 2"></div>
-                        <button type="button" class="delete-row-btn" title="Remove row">×</button>
-                    </div>
-                    <div class="form-group metaproperty-row">
-                        <div><input type="text" id="field3" placeholder="🔧 Metaproperty 3"></div>
-                        <div><input type="text" id="value3" placeholder="📋 Option 3"></div>
-                        <button type="button" class="delete-row-btn" title="Remove row">×</button>
-                    </div>
-                    <div class="form-group metaproperty-row">
-                        <div><input type="text" id="field4" placeholder="🔧 Metaproperty 4"></div>
-                        <div><input type="text" id="value4" placeholder="📋 Option 4"></div>
-                        <button type="button" class="delete-row-btn" title="Remove row">×</button>
-                    </div>
-                </div>
-                <div style="display:flex; justify-content:center; margin: 4px 0 8px;">
-                    <button type="button" id="add-metaproperty-btn" style="background:none; border:1px dashed #9CB8E8; border-radius:6px; color:#0545ac; font-size:18px; font-family:'Inter',sans-serif; font-weight:400; padding:2px 14px; cursor:pointer;">+</button>
-                </div>
-
-                <hr class="section-divider">
-                <h2>Add Tags</h2>
-                <h3>Ensure proper capitalization!</h3>
-                <div id="tag-rows">
-                    <div class="form-group tag-row">
-                        <div><input type="text" id="tag1" placeholder="🏷️ Tag 1"></div>
-                        <div><input type="text" id="tag2" placeholder="🏷️ Tag 2"></div>
-                        <button type="button" class="delete-row-btn" title="Remove row">×</button>
-                    </div>
-                    <div class="form-group tag-row">
-                        <div><input type="text" id="tag3" placeholder="🏷️ Tag 3"></div>
-                        <div><input type="text" id="tag4" placeholder="🏷️ Tag 4"></div>
-                        <button type="button" class="delete-row-btn" title="Remove row">×</button>
-                    </div>
-                </div>
-                <div style="display:flex; justify-content:center; margin: 4px 0 8px;">
-                    <button type="button" id="add-tag-btn" style="background:none; border:1px dashed #9CB8E8; border-radius:6px; color:#0545ac; font-size:18px; font-family:'Inter',sans-serif; font-weight:400; padding:2px 14px; cursor:pointer;">+</button>
-                </div>
-
-                <hr class="section-divider">
-                <h2>Status Actions</h2>
-                <div class="button-grid" id="status-grid-1">
-                    <button data-status-param="field=dateCreated&value=lastday"><span>📅</span><br>Assets Added Yesterday</button>
-                    <button data-status-param="field=dateCreated&value=lastweek"><span>📆</span><br>Assets Added Last Week</button>
-                    <button data-status-param="field=watermark&value=1"><span>💧</span><br>Watermarked Assets</button>
-                    <button data-status-param="field=archive&value=1"><span>📂</span><br>Archived Assets</button>
-                    <button data-status-param="field=isActive&value=true"><span>✅</span><br>Active Assets</button>
-                    <button data-status-param="field=isPublic&value=1"><span>🌍</span><br>Public Assets</button>
-                    <button data-status-param="field=keyVisual&value=1"><span>🔒</span><br>Limited Usage Assets</button>
-                    <button data-status-param="field=audit&value=1"><span>⏳</span><br>Sent for Review Assets</button>
-                </div>
-
-                <div class="generated-link-container">
-                    <h2>Generated Link</h2>
-                    <div class="output-container" id="output-box-1" title="Click to copy">
-                        <div class="output-label">Click to copy</div>
-                        <div class="output-body">
-                            <p id="output" class="empty-state">Your generated link will appear here</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tab-panel" id="panel2">
-                <hr class="section-divider">
-                <h2>Add Keywords</h2>
-                <h3>This creates a search link using specified keywords.</h3>
-
-                <div id="keyword-rows">
-                    <div class="form-group keyword-row">
-                        <input type="text" id="keyword1" placeholder="🔑 Keyword 1">
-                    </div>
-                    <div class="form-group keyword-row">
-                        <input type="text" id="keyword2" placeholder="🔑 Keyword 2">
-                    </div>
-                    <div class="form-group keyword-row">
-                        <input type="text" id="keyword3" placeholder="🔑 Keyword 3">
-                    </div>
-                    <div class="form-group keyword-row">
-                        <input type="text" id="keyword4" placeholder="🔑 Keyword 4">
-                    </div>
-                </div>
-                <div style="display:flex; justify-content:center; margin: 4px 0 8px;">
-                    <button type="button" id="add-keyword-btn" style="background:none; border:1px dashed #9CB8E8; border-radius:6px; color:#0545ac; font-size:18px; font-family:'Inter',sans-serif; font-weight:400; padding:2px 14px; cursor:pointer;">+</button>
-                </div>
-
-                <hr class="section-divider">
-                <h2>Status Actions</h2>
-                <div class="button-grid" id="status-grid-2">
-                    <button data-status-param="field=dateCreated&value=lastday"><span>📅</span><br>Assets Added Yesterday</button>
-                    <button data-status-param="field=dateCreated&value=lastweek"><span>📆</span><br>Assets Added Last Week</button>
-                    <button data-status-param="field=watermark&value=1"><span>💧</span><br>Watermarked Assets</button>
-                    <button data-status-param="field=archive&value=1"><span>📂</span><br>Archived Assets</button>
-                    <button data-status-param="field=isActive&value=true"><span>✅</span><br>Active Assets</button>
-                    <button data-status-param="field=isPublic&value=1"><span>🌍</span><br>Public Assets</button>
-                    <button data-status-param="field=keyVisual&value=1"><span>🔒</span><br>Limited Usage Assets</button>
-                    <button data-status-param="field=audit&value=1"><span>⏳</span><br>Sent for Review Assets</button>
-                </div>
-
-                <div class="generated-link-container">
-                    <h2>Generated Link</h2>
-                    <div class="output-container" id="output-box-2" title="Click to copy">
-                        <div class="output-label">Click to copy</div>
-                        <div class="output-body">
-                            <p id="output2" class="empty-state">Your generated link will appear here</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tab-panel" id="panel3">
-                <hr class="section-divider">
-                <h2>Browse &amp; Select an Asset</h2>
-                <h3>Select an asset to import its metaproperties and tags. Your connection ends when you import an asset or close the browser.</h3>
+            <section class="builder-section" aria-labelledby="metaproperty-heading">
+                <h2 id="metaproperty-heading"><svg class="section-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#sliders"></use></svg>Metaproperties &amp; options</h2>
+                <p class="section-help" id="metaproperty-help">Match capitalization and use the <a href="https://support.bynder.com/hc/en-us/articles/6190351879186-Create-Metaproperties#h_01KNM026Q3NVKNYR38QH1W90JJ" target="_blank" rel="noopener noreferrer">database names</a> for renamed fields or options.</p>
+                <div id="metaproperty-rows"><div class="form-group metaproperty-row"><label class="field" for="field1"><span class="field-label">Metaproperty 1</span><span class="input-wrap"><svg class="field-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#sliders"></use></svg><input type="text" id="field1" placeholder="Metaproperty 1" autocomplete="off" spellcheck="false" aria-describedby="metaproperty-help"></span></label><label class="field" for="value1"><span class="field-label">Option 1</span><span class="input-wrap"><svg class="field-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#option"></use></svg><input type="text" id="value1" placeholder="Option 1" autocomplete="off" spellcheck="false" aria-describedby="metaproperty-help"></span></label><button type="button" class="delete-row-btn" aria-label="Remove metaproperty 1" title="Remove metaproperty 1">×</button></div>
+<div class="form-group metaproperty-row"><label class="field" for="field2"><span class="field-label">Metaproperty 2</span><span class="input-wrap"><svg class="field-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#sliders"></use></svg><input type="text" id="field2" placeholder="Metaproperty 2" autocomplete="off" spellcheck="false" aria-describedby="metaproperty-help"></span></label><label class="field" for="value2"><span class="field-label">Option 2</span><span class="input-wrap"><svg class="field-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#option"></use></svg><input type="text" id="value2" placeholder="Option 2" autocomplete="off" spellcheck="false" aria-describedby="metaproperty-help"></span></label><button type="button" class="delete-row-btn" aria-label="Remove metaproperty 2" title="Remove metaproperty 2">×</button></div>
+<div class="form-group metaproperty-row"><label class="field" for="field3"><span class="field-label">Metaproperty 3</span><span class="input-wrap"><svg class="field-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#sliders"></use></svg><input type="text" id="field3" placeholder="Metaproperty 3" autocomplete="off" spellcheck="false" aria-describedby="metaproperty-help"></span></label><label class="field" for="value3"><span class="field-label">Option 3</span><span class="input-wrap"><svg class="field-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#option"></use></svg><input type="text" id="value3" placeholder="Option 3" autocomplete="off" spellcheck="false" aria-describedby="metaproperty-help"></span></label><button type="button" class="delete-row-btn" aria-label="Remove metaproperty 3" title="Remove metaproperty 3">×</button></div>
+<div class="form-group metaproperty-row"><label class="field" for="field4"><span class="field-label">Metaproperty 4</span><span class="input-wrap"><svg class="field-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#sliders"></use></svg><input type="text" id="field4" placeholder="Metaproperty 4" autocomplete="off" spellcheck="false" aria-describedby="metaproperty-help"></span></label><label class="field" for="value4"><span class="field-label">Option 4</span><span class="input-wrap"><svg class="field-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#option"></use></svg><input type="text" id="value4" placeholder="Option 4" autocomplete="off" spellcheck="false" aria-describedby="metaproperty-help"></span></label><button type="button" class="delete-row-btn" aria-label="Remove metaproperty 4" title="Remove metaproperty 4">×</button></div></div>
+                <button type="button" id="add-metaproperty-btn" class="add-row-btn"><span aria-hidden="true">+</span> Add metaproperty</button>
+            </section>
+            <section class="builder-section" aria-labelledby="tag-heading">
+                <h2 id="tag-heading"><svg class="section-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#tag"></use></svg>Tags</h2>
+                <p class="section-help" id="tag-help">Use tags exactly as they appear in your portal, including capitalization.</p>
+                <div id="tag-rows"><div class="form-group tag-row"><label class="field" for="tag1"><span class="field-label">Tag 1</span><span class="input-wrap"><svg class="field-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#tag"></use></svg><input type="text" id="tag1" placeholder="Tag 1" autocomplete="off" spellcheck="false" aria-describedby="tag-help"></span></label><label class="field" for="tag2"><span class="field-label">Tag 2</span><span class="input-wrap"><svg class="field-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#tag"></use></svg><input type="text" id="tag2" placeholder="Tag 2" autocomplete="off" spellcheck="false" aria-describedby="tag-help"></span></label><button type="button" class="delete-row-btn" aria-label="Remove tags 1 and 2" title="Remove tags 1 and 2">×</button></div>
+<div class="form-group tag-row"><label class="field" for="tag3"><span class="field-label">Tag 3</span><span class="input-wrap"><svg class="field-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#tag"></use></svg><input type="text" id="tag3" placeholder="Tag 3" autocomplete="off" spellcheck="false" aria-describedby="tag-help"></span></label><label class="field" for="tag4"><span class="field-label">Tag 4</span><span class="input-wrap"><svg class="field-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#tag"></use></svg><input type="text" id="tag4" placeholder="Tag 4" autocomplete="off" spellcheck="false" aria-describedby="tag-help"></span></label><button type="button" class="delete-row-btn" aria-label="Remove tags 3 and 4" title="Remove tags 3 and 4">×</button></div></div>
+                <button type="button" id="add-tag-btn" class="add-row-btn"><span aria-hidden="true">+</span> Add tags</button>
+            </section>
+            <section class="builder-section" aria-labelledby="keyword-heading">
+                <h2 id="keyword-heading"><svg class="section-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#search"></use></svg>Keyword</h2>
+                <p class="section-help">Add keywords to combine with your metaproperties, tags, and status filters. Leave blank for a filters-only link.</p>
+                <div id="keyword-rows"><div class="form-group keyword-row"><label class="field" for="keyword1"><span class="field-label">Keyword 1</span><span class="input-wrap"><svg class="field-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#search"></use></svg><input type="text" id="keyword1" placeholder="Keyword 1" autocomplete="off" spellcheck="false"></span></label></div>
+<div class="form-group keyword-row"><label class="field" for="keyword2"><span class="field-label">Keyword 2</span><span class="input-wrap"><svg class="field-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#search"></use></svg><input type="text" id="keyword2" placeholder="Keyword 2" autocomplete="off" spellcheck="false"></span></label></div>
+<div class="form-group keyword-row"><label class="field" for="keyword3"><span class="field-label">Keyword 3</span><span class="input-wrap"><svg class="field-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#search"></use></svg><input type="text" id="keyword3" placeholder="Keyword 3" autocomplete="off" spellcheck="false"></span></label></div>
+<div class="form-group keyword-row"><label class="field" for="keyword4"><span class="field-label">Keyword 4</span><span class="input-wrap"><svg class="field-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#search"></use></svg><input type="text" id="keyword4" placeholder="Keyword 4" autocomplete="off" spellcheck="false"></span></label></div></div>
+                <button type="button" id="add-keyword-btn" class="add-row-btn"><span aria-hidden="true">+</span> Add keyword</button>
+            </section>
+            <section class="builder-section" aria-labelledby="status-heading-1">
+    <h2 id="status-heading-1"><svg class="section-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#sliders"></use></svg>Status &amp; rights</h2>
+    <p class="section-help">Select any filters to include in your search.</p>
+    <div class="button-grid" id="status-grid-1" role="group" aria-labelledby="status-heading-1"><button type="button" aria-pressed="false" data-status-param="field=dateCreated&amp;value=lastday"><svg class="filter-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#calendar-day"></use></svg><span class="filter-indicator" aria-hidden="true"></span>Added yesterday</button>
+<button type="button" aria-pressed="false" data-status-param="field=dateCreated&amp;value=lastweek"><svg class="filter-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#calendar-week"></use></svg><span class="filter-indicator" aria-hidden="true"></span>Added last week</button>
+<button type="button" aria-pressed="false" data-status-param="field=watermark&amp;value=1"><svg class="filter-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#droplet"></use></svg><span class="filter-indicator" aria-hidden="true"></span>Watermarked</button>
+<button type="button" aria-pressed="false" data-status-param="field=archive&amp;value=1"><svg class="filter-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#archive"></use></svg><span class="filter-indicator" aria-hidden="true"></span>Archived</button>
+<button type="button" aria-pressed="false" data-status-param="field=isActive&amp;value=true"><svg class="filter-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#check-circle"></use></svg><span class="filter-indicator" aria-hidden="true"></span>Active</button>
+<button type="button" aria-pressed="false" data-status-param="field=isPublic&amp;value=true"><svg class="filter-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#globe"></use></svg><span class="filter-indicator" aria-hidden="true"></span>Public</button>
+<button type="button" aria-pressed="false" data-status-param="field=keyVisual&amp;value=1"><svg class="filter-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#hourglass"></use></svg><span class="filter-indicator" aria-hidden="true"></span>Limited usage</button>
+<button type="button" aria-pressed="false" data-status-param="field=audit&amp;value=1"><svg class="filter-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#review"></use></svg><span class="filter-indicator" aria-hidden="true"></span>Sent for review</button></div>
+</section>
+            <section class="generated-link-container" aria-labelledby="result-heading-1">
+    <div class="result-heading"><h2 id="result-heading-1"><svg class="section-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#link"></use></svg>Generated link</h2></div>
+    <div class="output-container" id="output-box-1"><p id="output" class="empty-state">Your generated link will appear here</p></div>
+    <div class="result-actions">
+        <button type="button" class="copy-link-btn primary-button" disabled><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#copy"></use></svg><span class="button-label">Copy link</span></button>
+        <a class="open-link" target="_blank" rel="noopener noreferrer" hidden>Open link <span aria-hidden="true">↗</span></a>
+        <p class="copy-status" role="status" aria-live="polite"></p>
+    </div>
+</section>
+        </div>
+        <div class="tab-panel" id="panel3" role="tabpanel" aria-labelledby="tab3" hidden>
+            <section class="builder-section picker-section" aria-labelledby="picker-heading">
+                <h2 id="picker-heading"><svg class="section-icon icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/builder-icons.svg#images"></use></svg>Start with an asset</h2>
+                <p class="section-help">Select an asset to fill in its metaproperties and tags. You can review the fields before using your link.</p>
                 <div id="ucv-prompt">
                     <p id="ucv-prompt-text">Enter your Portal URL above, then click <strong>Open Asset Browser</strong>.</p>
-                    <button id="ucv-open-btn" disabled>Open Asset Browser</button>
+                    <button type="button" id="ucv-open-btn" disabled>Open Asset Browser</button>
+                    <p class="picker-note">Your connection ends when you select an asset or close the picker. <a href="/terms/#asset-picker">How it works</a></p>
                 </div>
-                <div id="ucv-container"></div>
-                <div id="ucv-status"></div>
-            </div>
-
+                <div id="ucv-status" role="status" aria-live="polite"></div>
+            </section>
+            <div id="ucv-container"></div>
         </div>
     </div>
-<script type="module" src="/script.js"></script>
+</main>
+<script type="module" src="/script.js?v=5"></script>
 </body>
 </html>
