@@ -188,8 +188,6 @@ document.addEventListener("DOMContentLoaded", function () {
         outputStates.set(section, state);
         const button = section.querySelector('.copy-link-btn');
         const feedback = section.querySelector('.copy-status');
-        const toggle = section.querySelector('.result-toggle');
-        toggle.addEventListener('click', () => setResultExpanded(section, !section.classList.contains('is-expanded')));
         button.addEventListener('click', async () => {
             const link = section.querySelector('.output-container a');
             if (!link) return;
@@ -207,20 +205,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 }, 2000);
             } catch {
                 if (revision !== state.revision) return;
-                setResultExpanded(section, true);
-                feedback.textContent = 'Could not copy. Select the URL above and copy it manually.';
+                feedback.textContent = 'Copy failed. Right-click or long-press Open link to copy its address.';
             } finally {
                 if (revision === state.revision) button.disabled = false;
             }
         });
     });
-
-    function setResultExpanded(section, expanded) {
-        section.classList.toggle('is-expanded', expanded);
-        const toggle = section.querySelector('.result-toggle');
-        toggle.setAttribute('aria-expanded', String(expanded));
-        toggle.textContent = expanded ? 'Collapse link' : 'View full link';
-    }
 
     function updateOutputActions(el, url) {
         const section = el.closest('.generated-link-container');
@@ -229,8 +219,6 @@ document.addEventListener("DOMContentLoaded", function () {
         clearTimeout(state.timer);
         const button = section.querySelector('.copy-link-btn');
         button.disabled = !url;
-        section.querySelector('.result-toggle').disabled = !url;
-        if (!url) setResultExpanded(section, false);
         button.querySelector('.button-label').textContent = 'Copy link';
         section.querySelector('.copy-status').textContent = '';
         const open = section.querySelector('.open-link');

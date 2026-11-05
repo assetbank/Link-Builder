@@ -183,7 +183,8 @@ test('copy and open are separate; copy failure leaves an actionable fallback', a
         await opened.close();
         await page.evaluate(() => { navigator.clipboard.writeText = async () => { throw new Error('Denied'); }; });
         await copy.click();
-        assert.match(await page.locator('#panel1 .copy-status').textContent(), /copy it manually/);
+        assert.match(await page.locator('#panel1 .copy-status').textContent(), /Open link to copy its address/);
+        assert.equal(await page.locator('#panel1 .open-link').getAttribute('href'), link);
         assert.equal(await page.locator('#output a').getAttribute('href'), link);
     } finally { await context.close(); }
 });
@@ -221,7 +222,7 @@ test('responsive controls remain on-screen and shared header matches the terms p
 });
 
 
-test('compact defaults keep copy and the full link accessible while scrolling', async () => {
+test('compact result bar keeps copy and open accessible for long links while scrolling', async () => {
     for (const width of [390, 1440]) {
         const { context, page, errors } = await setup(width);
         try {
@@ -232,6 +233,7 @@ test('compact defaults keep copy and the full link accessible while scrolling', 
             await page.locator('#baseURL').fill('portal.example');
             await page.locator('#tag1').fill('Launch');
             const copy = page.locator('#panel1 .copy-link-btn');
+            assert.equal(await page.locator('.result-actions > :is(button, a)').count(), 2);
             const withinViewport = async () => {
                 const box = await copy.boundingBox();
                 assert(box && box.y >= 0 && box.y + box.height <= 740);
@@ -242,20 +244,18 @@ test('compact defaults keep copy and the full link accessible while scrolling', 
             assert.match((await page.evaluate(() => window.copiedLinks)).at(-1), /value=Launch/);
             await page.evaluate(() => scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' }));
             await withinViewport();
+            const barHeight = (await page.locator('.generated-link-container').boundingBox()).height;
             await page.locator('#keyword1').fill('long keyword '.repeat(50));
             const expected = await page.locator('#output a').getAttribute('href');
-            await page.getByRole('button', { name: 'View full link', exact: true }).click();
-            assert(await page.locator('#output a').isVisible());
-            assert.equal(await page.locator('.result-toggle').getAttribute('aria-expanded'), 'true');
+            assert.equal((await page.locator('.generated-link-container').boundingBox()).height, barHeight);
+            assert.equal(await page.locator('.open-link').getAttribute('href'), expected);
             await withinViewport();
             await copy.click();
             assert.equal((await page.evaluate(() => window.copiedLinks)).at(-1), expected);
-            await page.getByRole('button', { name: 'Collapse link', exact: true }).click();
             await page.evaluate(() => { navigator.clipboard.writeText = async () => { throw new Error('Denied'); }; });
             await copy.click();
-            assert(await page.locator('#output a').isVisible());
-            assert.equal(await page.locator('.result-toggle').getAttribute('aria-expanded'), 'true');
-            assert.match(await page.locator('.copy-status').textContent(), /copy it manually/);
+            assert.equal(await page.locator('.open-link').getAttribute('href'), expected);
+            assert.match(await page.locator('.copy-status').textContent(), /Open link to copy its address/);
             await withinViewport();
             await page.locator('#tab3').click();
             assert(await copy.isHidden());
